@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICCT Student Portal - Dashboard</title>
+    <meta name="description" content=" Student Portal - Access your courses, grades, schedules, and academic resources in one convenient platform.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <!-- jsPDF for client-side ORF PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <header class="top-nav">
+        <div class="nav-left">
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <div class="logo-section">
+                <div class="logo"></div>
+                <h1>Student Portal</h1>
+            </div>
+            <div class="nav-center">
+                <form id="searchForm" class="search-form" onsubmit="return false">
+                    <input id="globalSearch" type="search" placeholder="Search courses, announcements, messages..." aria-label="Search">
+                    <button class="btn-icon" aria-label="Search" onclick="handleSearch()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="7"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="nav-right">
+            <div class="student-info">
+                <div class="avatar">JD</div>
+                <span class="student-name">Juan Dela Cruz</span>
+            </div>
+            <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">
+                <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+                <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+            </button>
+
+            <button class="icon-btn" id="logoutBtn" aria-label="Logout">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <nav class="sidebar-nav">
+                <!-- Profile Section -->
+                <div class="profile-section">
+                    <div class="profile-info">
+                        <div class="profile-avatar">JD</div>
+                        <div class="profile-details">
+                            <h4>Juan Dela Cruz</h4>
+                            <p>Student ID: 2024-00001</p>
+                            <p>BS Computer Science</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="nav-section">
+                    <h3>Navigation</h3>
+                    <a href="#dashboard" class="nav-item active" data-page="dashboard">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#schedule" class="nav-item" data-page="schedule">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        <span>Schedule</span>
+                    </a>
+                    <a href="#grades" class="nav-item" data-page="grades">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                        </svg>
+                        <span>Grades</span>
+                    </a>
+                    <a href="#enrollment" class="nav-item" data-page="enrollment">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 11l3 3L22 4"></path>
+                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                        </svg>
+                        <span>Enrollment</span>
+                    </a>
+                    <a href="#ledger" class="nav-item" data-page="ledger">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                        </svg>
+                        <span>Student Ledger</span>
+                    </a>
+                    <a href="#notifications" class="nav-item" data-page="notifications">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                        <span>Notifications</span>
+                        <span class="notification-count">2</span>
+                    </a>
+                    <a href="#profile" class="nav-item" data-page="profile">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <span>Profile</span>
+                    </a>
+                </div>
+                <!-- Resources -->
+                <div class="nav-section resources-section">
+                    <h3>Resources</h3>
+                    <a class="nav-item" href="#library" data-page="library">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"></path></svg>
+                        <span>Library</span>
+                    </a>
+                    <a class="nav-item" href="#email" data-page="email">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"></path></svg>
+                        <span>Student Email</span>
+                    </a>
+                    <a class="nav-item" href="#career" data-page="career">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 11V7a4 4 0 0 0-8 0v4"></path></svg>
+                        <span>Career Services</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Page -->
+            <div id="dashboard-page" class="page active">
+                <div class="page-header">
+                    <h2>Dashboard</h2>
+                    <p>Welcome back! Here's your academic overview.</p>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="announcements-section">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+                                        <line x1="4" y1="22" x2="4" y2="15"></line>
+                                    </svg>
+                                    Announcements
+                                </h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="announcement-item">
+                                    <div class="announcement-header">
+                                        <h4>Enrollment for Second Semester</h4>
+                                        <span class="badge badge-high">high</span>
+                                    </div>
+                                    <p>Online enrollment for the second semester will begin on January 15, 2025. Please settle all outstanding balances before enrollment.</p>
+                                    <span class="time-text">December 10, 2024</span>
+                                </div>
+                                <div class="announcement-item">
+                                    <div class="announcement-header">
+                                        <h4>Final Examination Schedule</h4>
+                                        <span class="badge badge-high">high</span>
+                                    </div>
+                                    <p>Final examinations will be held from December 18-22, 2024. Check your schedule for specific dates and times.</p>
+                                    <span class="time-text">December 8, 2024</span>
+                                </div>
+                                <div class="announcement-item">
+                                    <div class="announcement-header">
+                                        <h4>Library Holiday Hours</h4>
+                                        <span class="badge badge-medium">medium</span>
+                                    </div>
+                                    <p>The library will be closed from December 23, 2024 to January 3, 2025 for the holiday break.</p>
+                                    <span class="time-text">December 5, 2024</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tuition-section">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Tuition Balance</h3>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            </div>
+                            <div class="card-content">
+                                <div class="balance-amount">₱15,000.00</div>
+                                <p class="balance-due">Due: January 15, 2025</p>
+                                <div class="alert-box">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                    </svg>
+                                    <span>Payment required</span>
+                                </div>
+                                <button class="btn btn-primary btn-block" onclick="navigateTo('ledger')">Pay Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- New Dashboard Widgets -->
+                <div class="dashboard-widgets">
+                    <div class="widget-grid">
+                        <div class="card widget-gpa">
+                            <div class="card-header">
+                                <h3>Academic Overview</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="gpa-row">
+                                    <div>
+                                        <div class="gpa-value" id="gpaValue">2.85</div>
+                                        <div class="gpa-label">Cumulative GPA</div>
+                                    </div>
+                                    <div class="progress-legend">
+                                        <div>Completed Units</div>
+                                        <div class="units-value-small">90</div>
+                                    </div>
+                                </div>
+                                <div class="gpa-actions">
+                                    <button class="btn btn-primary" onclick="navigateTo('enrollment')">View Courses</button>
+                                    <button class="btn btn-secondary" onclick="navigateTo('profile')">Edit Profile</button>
+                                </div>
+                                <div class="gpa-sparkline" id="gpaSparkline" aria-hidden="true"></div>
+                            </div>
+                        </div>
+
+                        <div class="card widget-todo">
+                            <div class="card-header">
+                                <h3>To-do / Deadlines</h3>
+                            </div>
+                            <div class="card-content">
+                                <ul id="todoList" class="todo-list">
+                                    <!-- populated by JS -->
+                                </ul>
+                                <div class="todo-actions">
+                                    <input id="todoInput" type="text" placeholder="Add a deadline or task">
+                                    <button class="btn btn-primary" onclick="addTodo()">Add</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card widget-quicklinks">
+                            <div class="card-header">
+                                <h3>Quick Links</h3>
+                            </div>
+                            <div class="card-content quicklinks-grid">
+                                <button class="btn btn-secondary" onclick="openLink('#enrollment')">Enroll</button>
+                                <button class="btn btn-secondary" onclick="openLink('#ledger')">Pay Tuition</button>
+                                <button class="btn btn-secondary" onclick="openLink('#schedule')">My Schedule</button>
+                                <button class="btn btn-secondary" onclick="openLink('#notifications')">Notifications</button>
+                            </div>
+                        </div>
+
+                        <div class="card widget-career">
+                            <div class="card-header"><h3>Career & Opportunities</h3></div>
+                            <div class="card-content">
+                                <ul>
+                                    <li><strong>Company Visit:</strong> TechFirm — Oct 20, 2025</li>
+                                    <li><strong>Internship Fair:</strong> Industry Park — Nov 3, 2025</li>
+                                </ul>
+                                <button class="btn btn-primary" onclick="openLink('https://career.icct.edu.ph')">See Openings</button>
+                            </div>
+                        </div>
+
+                        <div class="card widget-events">
+                            <div class="card-header"><h3>Upcoming Events</h3></div>
+                            <div class="card-content">
+                                <ul>
+                                    <li>Orientation Week — Jan 10-14, 2026</li>
+                                    <li>Career Talk: Web Dev — Oct 25, 2025</li>
+                                </ul>
+                                <button class="btn btn-secondary" onclick="openLink('#schedule')">View Calendar</button>
+                            </div>
+                        </div>
+
+                        <div class="card widget-messages">
+                            <div class="card-header">
+                                <h3>Recent Messages</h3>
+                            </div>
+                            <div class="card-content">
+                                <ul id="messagesList" class="messages-list"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grades-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                                    <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                                </svg>
+                                Grades - First Semester 2024-2025
+                            </h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="alert-box alert-error">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                </svg>
+                                <span>1 failing grade</span>
+                            </div>
+                            <div class="grades-list">
+                                <div class="grade-item">
+                                    <div class="grade-info">
+                                        <div class="grade-course">
+                                            <strong>Database Systems</strong>
+                                        </div>
+                                        <p class="grade-details">CS301 • 3 units</p>
+                                    </div>
+                                    <span class="badge badge-pass">1.75</span>
+                                </div>
+                                <div class="grade-item">
+                                    <div class="grade-info">
+                                        <div class="grade-course">
+                                            <strong>Web Development</strong>
+                                        </div>
+                                        <p class="grade-details">CS302 • 3 units</p>
+                                    </div>
+                                    <span class="badge badge-pass">2.00</span>
+                                </div>
+                                <div class="grade-item">
+                                    <div class="grade-info">
+                                        <div class="grade-course">
+                                            <strong>Network Security</strong>
+                                            <svg class="warning-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                            </svg>
+                                        </div>
+                                        <p class="grade-details">CS303 • 3 units</p>
+                                    </div>
+                                    <span class="badge badge-fail">5.00</span>
+                                </div>
+                                <div class="grade-item">
+                                    <div class="grade-info">
+                                        <div class="grade-course">
+                                            <strong>Data Structures</strong>
+                                        </div>
+                                        <p class="grade-details">CS304 • 3 units</p>
+                                    </div>
+                                    <span class="badge badge-pass">1.50</span>
+                                </div>
+                                <div class="grade-item">
+                                    <div class="grade-info">
+                                        <div class="grade-course">
+                                            <strong>Software Engineering</strong>
+                                        </div>
+                                        <p class="grade-details">CS305 • 3 units</p>
+                                    </div>
+                                    <span class="badge badge-pass">2.25</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grades Page -->
+            <div id="grades-page" class="page">
+                <div class="section-header">
+                    <div>
+                        <h2>Academic Grades</h2>
+                        <p class="text-muted">View your grades and academic performance</p>
+                    </div>
+                    <select class="form-select" id="semesterSelect">
+                        <option value="2024-2">2nd Semester, AY 2024-2025 (Current)</option>
+                        <option value="2024-1">1st Semester, AY 2024-2025</option>
+                        <option value="2023-2">2nd Semester, AY 2023-2024</option>
+                    </select>
+                </div>
+
+                <div class="stats-grid stats-grid-2">
+                    <div class="stat-card">
+                        <i class="fas fa-chart-line stat-icon" style="color: #4ade80;"></i>
+                        <div class="stat-value">1.41</div>
+                        <div class="stat-label">Semester GWA</div>
+                        <p class="stat-subtitle">1.00 = Highest, 5.00 = Lowest</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-award stat-icon" style="color: #4361ee;"></i>
+                        <div class="stat-value">16</div>
+                        <div class="stat-label">Credits This Semester</div>
+                        <p class="stat-subtitle">Total units enrolled</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Course Grades</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Course Code</th>
+                                    <th>Course Name</th>
+                                    <th style="text-align: center;">Credits</th>
+                                    <th style="text-align: center;">Grade</th>
+                                    <th>Remarks</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge badge-outline">CS301</span></td>
+                                    <td>Database Systems</td>
+                                    <td style="text-align: center;">3</td>
+                                    <td style="text-align: center;"><span class="grade-badge grade-excellent">1.25</span></td>
+                                    <td class="text-muted">Excellent</td>
+                                    <td><span class="badge badge-success"><i class="fas fa-check-circle"></i> Verified</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-outline">CS302</span></td>
+                                    <td>Software Engineering</td>
+                                    <td style="text-align: center;">3</td>
+                                    <td style="text-align: center;"><span class="grade-badge grade-verygood">1.50</span></td>
+                                    <td class="text-muted">Very Good</td>
+                                    <td><span class="badge badge-success"><i class="fas fa-check-circle"></i> Verified</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-outline">CS303</span></td>
+                                    <td>Web Development</td>
+                                    <td style="text-align: center;">3</td>
+                                    <td style="text-align: center;"><span class="grade-badge grade-verygood">1.75</span></td>
+                                    <td class="text-muted">Very Good</td>
+                                    <td><span class="badge badge-warning"><i class="fas fa-clock"></i> Under Verification</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-outline">CS304</span></td>
+                                    <td>Data Structures & Algorithms</td>
+                                    <td style="text-align: center;">4</td>
+                                    <td style="text-align: center;"><span class="grade-badge grade-excellent">1.00</span></td>
+                                    <td class="text-muted">Excellent</td>
+                                    <td><span class="badge badge-success"><i class="fas fa-check-circle"></i> Verified</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-outline">GE105</span></td>
+                                    <td>Ethics and Philosophy</td>
+                                    <td style="text-align: center;">3</td>
+                                    <td style="text-align: center;"><span class="grade-badge grade-excellent">1.25</span></td>
+                                    <td class="text-muted">Excellent</td>
+                                    <td><span class="badge badge-info"><i class="fas fa-info-circle"></i> Pending</span></td>
+                                </tr>
+                                <tr class="total-row">
+                                    <td colspan="2"><strong>SEMESTER TOTALS</strong></td>
+                                    <td style="text-align: center;"><strong>16</strong></td>
+                                    <td style="text-align: center;"><strong class="grade-badge grade-excellent">1.41</strong></td>
+                                    <td colspan="2"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card card-highlight">
+                    <div class="highlight-content">
+                        <div class="highlight-icon">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <div>
+                            <h3>Dean's List</h3>
+                            <p>Congratulations! You're on track for Dean's List honors with your current 1.41 GWA. Keep up the excellent work!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Library Page -->
+            <div id="library-page" class="page">
+                <div class="section-header">
+                    <div>
+                        <h2>Digital Library</h2>
+                        <p class="text-muted">Access academic resources, e-books, and research materials</p>
+                    </div>
+                </div>
+
+                <!-- Library Search -->
+                <div class="card">
+                    <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                        <input type="text" id="librarySearch" placeholder="Search books, journals, articles..." style="flex: 1; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem;">
+                        <button class="btn btn-primary"><i class="fas fa-search"></i> Search</button>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <span class="badge badge-secondary">All Categories</span>
+                        <span class="badge badge-outline">Computer Science</span>
+                        <span class="badge badge-outline">Business</span>
+                        <span class="badge badge-outline">Engineering</span>
+                        <span class="badge badge-outline">Research Papers</span>
+                    </div>
+                </div>
+
+                <!-- Featured Resources -->
+                <h3 style="margin: 2rem 0 1rem;">Featured Resources</h3>
+                <div class="course-grid" id="libraryResources">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+
+                <!-- Quick Links -->
+                <div class="card" style="margin-top: 2rem;">
+                    <h3 style="margin-bottom: 1rem;">Quick Links</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <a href="#" class="btn btn-outline" style="display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-book"></i> Browse Catalog
+                        </a>
+                        <a href="#" class="btn btn-outline" style="display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-bookmark"></i> My Borrowed Books
+                        </a>
+                        <a href="#" class="btn btn-outline" style="display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-history"></i> Reading History
+                        </a>
+                        <a href="#" class="btn btn-outline" style="display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-info-circle"></i> Library Hours
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Email Page -->
+            <div id="email-page" class="page">
+                <div class="section-header">
+                    <div>
+                        <h2>Student Email</h2>
+                        <p class="text-muted">Manage your academic email and messages</p>
+                    </div>
+                    <button class="btn btn-primary"><i class="fas fa-plus"></i> Compose</button>
+                </div>
+
+                <!-- Email Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #e3f2fd;"><i class="fas fa-inbox" style="color: #1976d2;"></i></div>
+                        <div>
+                            <p class="stat-value">24</p>
+                            <p class="stat-label">Inbox</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #fff3e0;"><i class="fas fa-paper-plane" style="color: #f57c00;"></i></div>
+                        <div>
+                            <p class="stat-value">12</p>
+                            <p class="stat-label">Sent</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #f3e5f5;"><i class="fas fa-star" style="color: #7b1fa2;"></i></div>
+                        <div>
+                            <p class="stat-value">8</p>
+                            <p class="stat-label">Important</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #e8f5e9;"><i class="fas fa-check-circle" style="color: #388e3c;"></i></div>
+                        <div>
+                            <p class="stat-value">3</p>
+                            <p class="stat-label">Unread</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email List -->
+                <div class="card" style="margin-top: 2rem;">
+                    <div style="border-bottom: 1px solid #e0e0e0; padding-bottom: 1rem; margin-bottom: 1rem;">
+                        <input type="text" placeholder="Search emails..." style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                    </div>
+                    <div id="emailList">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Career Services Page -->
+            <div id="career-page" class="page">
+                <div class="section-header">
+                    <div>
+                        <h2>Career Services</h2>
+                        <p class="text-muted">Explore job opportunities, internships, and career guidance</p>
+                    </div>
+                </div>
+
+                <!-- Career Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #e8f5e9;"><i class="fas fa-briefcase" style="color: #388e3c;"></i></div>
+                        <div>
+                            <p class="stat-value">45</p>
+                            <p class="stat-label">Job Openings</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #e3f2fd;"><i class="fas fa-user-tie" style="color: #1976d2;"></i></div>
+                        <div>
+                            <p class="stat-value">18</p>
+                            <p class="stat-label">Internships</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #fff3e0;"><i class="fas fa-calendar-alt" style="color: #f57c00;"></i></div>
+                        <div>
+                            <p class="stat-value">5</p>
+                            <p class="stat-label">Upcoming Events</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #f3e5f5;"><i class="fas fa-building" style="color: #7b1fa2;"></i></div>
+                        <div>
+                            <p class="stat-value">120+</p>
+                            <p class="stat-label">Partner Companies</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Job Listings -->
+                <h3 style="margin: 2rem 0 1rem;">Latest Job Openings</h3>
+                <div id="jobListings" style="display: grid; gap: 1rem;">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+
+                <!-- Career Resources -->
+                <div class="card" style="margin-top: 2rem;">
+                    <h3 style="margin-bottom: 1rem;">Career Resources</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                        <div style="padding: 1rem; border: 1px solid #e0e0e0; border-radius: 8px;">
+                            <i class="fas fa-file-alt" style="font-size: 2rem; color: #1976d2; margin-bottom: 0.5rem;"></i>
+                            <h4>Resume Builder</h4>
+                            <p style="color: #666; margin: 0.5rem 0;">Create a professional resume with our templates</p>
+                            <a href="#" class="btn btn-sm btn-outline">Start Building</a>
+                        </div>
+                        <div style="padding: 1rem; border: 1px solid #e0e0e0; border-radius: 8px;">
+                            <i class="fas fa-chalkboard-teacher" style="font-size: 2rem; color: #388e3c; margin-bottom: 0.5rem;"></i>
+                            <h4>Career Coaching</h4>
+                            <p style="color: #666; margin: 0.5rem 0;">Schedule one-on-one sessions with career advisors</p>
+                            <a href="#" class="btn btn-sm btn-outline">Book Session</a>
+                        </div>
+                        <div style="padding: 1rem; border: 1px solid #e0e0e0; border-radius: 8px;">
+                            <i class="fas fa-graduation-cap" style="font-size: 2rem; color: #f57c00; margin-bottom: 0.5rem;"></i>
+                            <h4>Skill Assessment</h4>
+                            <p style="color: #666; margin: 0.5rem 0;">Take tests to evaluate your professional skills</p>
+                            <a href="#" class="btn btn-sm btn-outline">Take Test</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Schedule Page -->
+            <div id="schedule-page" class="page">
+                <div class="section-header">
+                    <div>
+                        <h2>Class Schedule</h2>
+                        <p class="text-muted">2nd Semester, AY 2024-2025</p>
+                    </div>
+                    <div class="view-toggle">
+                        <button class="btn btn-sm active" id="weekViewBtn">
+                            <i class="fas fa-calendar-week"></i> Week
+                        </button>
+                        <button class="btn btn-sm btn-outline" id="dayViewBtn">
+                            <i class="fas fa-calendar-day"></i> Day
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div id="scheduleContent">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enrollment Page -->
+            <div id="enrollment-page" class="page">
+                <div class="section-header">
+                    <div>
+                        <h2>Course Enrollment</h2>
+                        <p class="text-muted">Enroll for upcoming semester courses</p>
+                    </div>
+                    <span class="badge badge-secondary" id="enrollmentCount">0 courses (0 credits) selected</span>
+                </div>
+
+                <!-- ORF Card -->
+                <div class="card card-orf">
+                    <div class="orf-header">
+                        <div class="orf-title">
+                            <div class="orf-icon">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div>
+                                <h3>Official Registration Form (ORF)</h3>
+                                <p>Download your registration form for the semester</p>
+                            </div>
+                        </div>
+                        <button class="btn" onclick="generateORFPDF()">
+                            <i class="fas fa-download"></i> Download ORF
+                        </button>
+                    </div>
+                    <div class="orf-details">
+                        <div class="orf-detail">
+                            <strong>Student Name</strong>
+                            <p>Juan Dela Cruz</p>
+                        </div>
+                        <div class="orf-detail">
+                            <strong>Student ID</strong>
+                            <p>2024-00001</p>
+                        </div>
+                        <div class="orf-detail">
+                            <strong>Program</strong>
+                            <p>BS Computer Science</p>
+                        </div>
+                        <div class="orf-detail">
+                            <strong>Year Level</strong>
+                            <p>3rd Year</p>
+                        </div>
+                        <div class="orf-detail">
+                            <strong>Semester</strong>
+                            <p>2nd Semester, AY 2024-2025</p>
+                        </div>
+                        <div class="orf-detail">
+                            <strong><i class="fas fa-calendar"></i> Generated</strong>
+                            <p>October 5, 2025</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="enrollmentCart" style="display: none;" class="card card-success">
+                    <div class="enrollment-cart">
+                        <div>
+                            <h3>Enrollment Cart</h3>
+                            <p id="cartSummary"></p>
+                        </div>
+                        <button class="btn">
+                            <i class="fas fa-check"></i> Submit Enrollment
+                        </button>
+                    </div>
+                </div>
+
+                <div class="enrollment-filters">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="courseSearch" placeholder="Search courses...">
+                    </div>
+                    <select class="form-select" id="deptFilter">
+                        <option value="all">All Departments</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="General Education">General Education</option>
+                    </select>
+                </div>
+
+                <div class="courses-grid" id="enrollmentCourses">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Notifications Page -->
+            <div id="notifications-page" class="page">
+                <div class="section-header">
+                    <div>
+                        <h2>Notifications</h2>
+                        <p class="text-muted">Stay updated with your academic activities</p>
+                    </div>
+                    <button class="btn btn-outline btn-sm">
+                        <i class="fas fa-check-double"></i> Mark All as Read
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Recent Notifications</h3>
+                        <span class="badge badge-primary">2 new</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="notifications-list">
+                            <div class="notification-item unread">
+                                <div class="notification-header">
+                                    <strong>New Assignment Posted</strong>
+                                    <div class="unread-dot"></div>
+                                </div>
+                                <p>Web Development - Project 2 due next week</p>
+                                <span class="notification-time">2 hours ago</span>
+                            </div>
+                            <div class="notification-item unread">
+                                <div class="notification-header">
+                                    <strong>Grade Updated</strong>
+                                    <div class="unread-dot"></div>
+                                </div>
+                                <p>Your grade for Database Systems midterm is now available</p>
+                                <span class="notification-time">5 hours ago</span>
+                            </div>
+                            <div class="notification-item">
+                                <div class="notification-header">
+                                    <strong>Class Cancelled</strong>
+                                </div>
+                                <p>Network Security class on Friday has been cancelled</p>
+                                <span class="notification-time">1 day ago</span>
+                            </div>
+                            <div class="notification-item">
+                                <div class="notification-header">
+                                    <strong>Payment Reminder</strong>
+                                </div>
+                                <p>Tuition payment due in 5 days</p>
+                                <span class="notification-time">2 days ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Page -->
+            <div id="profile-page" class="page">
+                <div class="section-header">
+                    <div>
+                        <h2>Student Profile</h2>
+                        <p class="text-muted">Manage your personal information</p>
+                    </div>
+                    <button class="btn" id="editProfileBtn">
+                        <i class="fas fa-edit"></i> Edit Profile
+                    </button>
+                </div>
+
+                <div class="profile-grid">
+                    <div class="card">
+                        <h3>Profile Photo</h3>
+                        <div class="profile-photo-section">
+                            <div class="profile-avatar-large">JD</div>
+                            <img id="profilePhotoPreview" class="profile-photo-preview" src="" alt="Profile Photo" style="display:none; width:80px; height:80px; border-radius:50%; object-fit:cover; margin-bottom:8px;">
+                            <input type="file" id="profilePhotoInput" accept="image/*" style="display:none">
+                            <div class="profile-photo-info">
+                                <h3 id="profileName">Juan Dela Cruz</h3>
+                                <p class="text-muted" id="profileId">2024-00001</p>
+                                <span class="badge badge-success">Active</span>
+                            </div>
+                            <button class="btn btn-secondary btn-sm" type="button" onclick="document.getElementById('profilePhotoInput').click()" style="margin-top:1rem;">Change Photo</button>
+                        </div>
+                    </div>
+
+                    <div class="card card-wide">
+                        <h3>Personal Information</h3>
+                        <div class="profile-form" id="profileForm">
+                            <div class="form-grid">
+                                <div class="input-group">
+                                    <label>First Name</label>
+                                    <div class="form-display">Juan</div>
+                                </div>
+                                <div class="input-group">
+                                    <label>Last Name</label>
+                                    <div class="form-display">Dela Cruz</div>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label><i class="fas fa-envelope"></i> Email Address</label>
+                                <div class="form-display">juan.delacruz@icct.edu.ph</div>
+                            </div>
+                            <div class="input-group">
+                                <label><i class="fas fa-phone"></i> Phone Number</label>
+                                <div class="form-display">+63 912 345 6789</div>
+                            </div>
+                            <div class="input-group">
+                                <label><i class="fas fa-map-marker-alt"></i> Address</label>
+                                <div class="form-display">123 Rizal Avenue, Manila, Philippines</div>
+                            </div>
+                            <div class="input-group">
+                                <label><i class="fas fa-calendar-alt"></i> Date of Birth</label>
+                                <div class="form-display">January 15, 2002</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Academic Information</h3>
+                    <div class="academic-info">
+                        <div class="academic-info-item">
+                            <label>Program</label>
+                            <p>Bachelor of Science in Computer Science</p>
+                        </div>
+                        <div class="academic-info-item">
+                            <label>Major</label>
+                            <p>Software Engineering</p>
+                        </div>
+                        <div class="academic-info-item">
+                            <label>Minor</label>
+                            <p>Data Science</p>
+                        </div>
+                        <div class="academic-info-item">
+                            <label>Year Level</label>
+                            <p>3rd Year</p>
+                        </div>
+                        <div class="academic-info-item">
+                            <label>Academic Advisor</label>
+                            <p>Prof. Maria Santos</p>
+                        </div>
+                        <div class="academic-info-item">
+                            <label>Expected Graduation</label>
+                            <p>May 2026</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Ledger Page -->
+            <div id="ledger-page" class="page">
+                <div class="section-header">
+                    <div>
+                        <h2>Student Ledger</h2>
+                        <p class="text-muted">Manage your payments and purchases</p>
+                    </div>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="tuition">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                        </svg>
+                        Tuition
+                    </button>
+                    <button class="tab-btn" data-tab="history">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        Payment History
+                    </button>
+                    <button class="tab-btn" data-tab="store">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                        Store
+                    </button>
+                </div>
+
+                <div id="tuition-tab" class="tab-content active">
+                    <div class="ledger-content">
+                        <div class="card ledger-balance-card">
+                            <div class="balance-display">
+                                <div class="balance-icon">
+                                    <i class="fas fa-wallet"></i>
+                                </div>
+                                <div class="balance-info">
+                                    <label>Current Balance</label>
+                                    <div class="balance-amount large">₱15,000.00</div>
+                                    <p class="balance-due">Due: January 15, 2025</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card payment-form-card">
+                            <h3>Make a Payment</h3>
+                            <div class="payment-form">
+                                <div class="form-group">
+                                    <label>Payment Amount</label>
+                                    <input type="number" id="paymentAmount" class="form-input" placeholder="Enter amount (₱)">
+                                </div>
+                                <div class="payment-methods">
+                                    <label>Payment Method</label>
+                                    <div class="method-options">
+                                        <div class="method-option">
+                                            <input type="radio" name="paymentMethod" id="gcash" value="gcash" checked>
+                                            <label for="gcash">
+                                                <i class="fas fa-mobile-alt"></i> GCash
+                                            </label>
+                                        </div>
+                                        <div class="method-option">
+                                            <input type="radio" name="paymentMethod" id="card" value="card">
+                                            <label for="card">
+                                                <i class="fas fa-credit-card"></i> Credit/Debit Card
+                                            </label>
+                                        </div>
+                                        <div class="method-option">
+                                            <input type="radio" name="paymentMethod" id="bank" value="bank">
+                                            <label for="bank">
+                                                <i class="fas fa-university"></i> Bank Transfer
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary btn-block" onclick="payTuition()">
+                                    <i class="fas fa-check-circle"></i> Pay Now
+                                </button>
+                                <div id="refNumberDisplay" class="ref-number" style="display:none">
+                                    <div class="ref-success">
+                                        <i class="fas fa-check-circle"></i>
+                                        <div>
+                                            <p>Payment Successful!</p>
+                                            <strong>Reference: <span id="refNumber"></span></strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="history-tab" class="tab-content">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Payment History</h3>
+                        </div>
+                        <div class="card-content">
+                            <div id="paymentHistory" class="payment-list">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="store-tab" class="tab-content">
+                    <div class="store-grid">
+                        <div class="card store-items">
+                            <div class="card-header">
+                                <h3>Available Items</h3>
+                            </div>
+                            <div class="card-content">
+                                <div id="storeItems" class="items-list">
+                                    <!-- Will be populated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card cart-section">
+                            <div class="card-header">
+                                <h3>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="9" cy="21" r="1"></circle>
+                                        <circle cx="20" cy="21" r="1"></circle>
+                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                    </svg>
+                                    Shopping Cart
+                                </h3>
+                            </div>
+                            <div class="card-content">
+                                <div id="cartItems" class="cart-list">
+                                    <p class="empty-state">Your cart is empty</p>
+                                </div>
+                                <div id="cartFooter" class="cart-footer" style="display:none">
+                                    <div class="cart-total">
+                                        <span>Total</span>
+                                        <strong id="cartTotal">₱0</strong>
+                                    </div>
+                                    <button class="btn btn-primary btn-block" onclick="checkout()">Checkout</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Store Item Modal (Hidden by Default) -->
+    <div id="storeItemModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeStoreItemModal()">&times;</span>
+            <img id="modalItemImage" src="" alt="Item Image" style="width:120px; height:120px; object-fit:cover; border-radius:8px; margin-bottom:12px;">
+            <h3 id="modalItemName"></h3>
+            <p id="modalItemDesc"></p>
+            <div id="modalItemPrice" style="font-weight:bold; margin-bottom:12px;"></div>
+            <button class="btn btn-primary" id="modalAddToCartBtn">Add to Cart</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
