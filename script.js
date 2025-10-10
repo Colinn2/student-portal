@@ -1121,106 +1121,234 @@ if (document.getElementById('gradesTrendChart')) {
 // ----------- PROFILE EDITING AND PHOTO UPLOAD -----------
 let isEditMode = false;
 
-// Handle photo upload
-const profilePhotoInput = document.getElementById('profilePhotoInput');
-if (profilePhotoInput) {
-    profilePhotoInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            // Validate file type
-            if (!file.type.startsWith('image/')) {
-                alert('Please select a valid image file.');
-                return;
-            }
-            
-            // Validate file size (max 5MB)
-            if (file.size > 5 * 1024 * 1024) {
-                alert('Image size should not exceed 5MB.');
-                return;
-            }
-            
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const imageUrl = event.target.result;
-                
-                // Update profile photo preview
-                const preview = document.getElementById('profilePhotoPreview');
-                if (preview) {
-                    preview.src = imageUrl;
-                    preview.style.display = 'block';
-                }
-                
-                // Update sidebar avatar
-                const sidebarAvatar = document.querySelector('.sidebar .user-profile img');
-                if (sidebarAvatar) {
-                    sidebarAvatar.src = imageUrl;
-                    sidebarAvatar.style.display = 'block';
-                }
-                
-                // Hide initials if they exist
-                const largeAvatar = document.querySelector('.profile-avatar-large');
-                if (largeAvatar) {
-                    largeAvatar.style.display = 'none';
-                }
-                
-                // Update top nav avatar
-                const topNavAvatar = document.querySelector('.top-nav .avatar');
-                if (topNavAvatar) {
-                    const img = topNavAvatar.querySelector('img') || document.createElement('img');
-                    img.src = imageUrl;
-                    img.style.width = '100%';
-                    img.style.height = '100%';
-                    img.style.objectFit = 'cover';
-                    img.style.borderRadius = '50%';
-                    if (!topNavAvatar.querySelector('img')) {
-                        topNavAvatar.innerHTML = '';
-                        topNavAvatar.appendChild(img);
-                    }
-                }
-                
-                // Save to localStorage
-                localStorage.setItem('profilePhoto', imageUrl);
-                
-                showToast('Profile photo updated successfully!', 'success');
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-}
-
-// Load saved photo on page load
-const savedPhoto = localStorage.getItem('profilePhoto');
-if (savedPhoto) {
+// Optimized function to update avatar in all locations
+function updateAvatarEverywhere(imageUrl) {
+    // Update profile photo preview
     const preview = document.getElementById('profilePhotoPreview');
     if (preview) {
-        preview.src = savedPhoto;
+        preview.src = imageUrl;
         preview.style.display = 'block';
     }
     
+    // Hide initials
     const largeAvatar = document.querySelector('.profile-avatar-large');
     if (largeAvatar) {
         largeAvatar.style.display = 'none';
     }
     
+    // Update sidebar avatar
     const sidebarAvatar = document.querySelector('.sidebar .user-profile img');
     if (sidebarAvatar) {
-        sidebarAvatar.src = savedPhoto;
+        sidebarAvatar.src = imageUrl;
         sidebarAvatar.style.display = 'block';
+    } else {
+        // Create sidebar image if it doesn't exist
+        const userProfile = document.querySelector('.sidebar .user-profile');
+        if (userProfile) {
+            const existingAvatar = userProfile.querySelector('.avatar');
+            if (existingAvatar) {
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                img.style.width = '40px';
+                img.style.height = '40px';
+                img.style.borderRadius = '50%';
+                img.style.objectFit = 'cover';
+                existingAvatar.replaceWith(img);
+            }
+        }
     }
     
+    // Update top nav avatar
     const topNavAvatar = document.querySelector('.top-nav .avatar');
     if (topNavAvatar) {
-        const img = topNavAvatar.querySelector('img') || document.createElement('img');
-        img.src = savedPhoto;
+        let img = topNavAvatar.querySelector('img');
+        if (!img) {
+            img = document.createElement('img');
+            topNavAvatar.innerHTML = '';
+            topNavAvatar.appendChild(img);
+        }
+        img.src = imageUrl;
         img.style.width = '100%';
         img.style.height = '100%';
         img.style.objectFit = 'cover';
         img.style.borderRadius = '50%';
-        if (!topNavAvatar.querySelector('img')) {
-            topNavAvatar.innerHTML = '';
-            topNavAvatar.appendChild(img);
+    }
+}
+
+// Compress and resize image before saving
+function compressImage(file, maxWidth = 800, quality = 0.8) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+                
+                // Resize if image is too large
+                if (width > maxWidth) {
+                    height = (height * maxWidth) / width;
+                    width = maxWidth;
+                }
+                
+                canvas.width = width;
+                canvas.height = height;
+                
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                // Convert to compressed base64
+                const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+                resolve(compressedDataUrl);
+            };
+            img.onerror = reject;
+            img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+// Handle photo upload
+const profilePhotoInput = document.getElementById('profilePhotoInput');
+if (profilePhotoInput) {
+    profilePhotoInput.addEventListener('change', async function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        // Validate file type
+        const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+        if (!validTypes.includes(file.type)) {
+            showToast('Please select a valid image file (JPG, PNG, GIF, or WebP).', 'error');
+            this.value = ''; // Reset input
+            return;
+        }
+        
+        // Validate file size (max 10MB before compression)
+        if (file.size > 10 * 1024 * 1024) {
+            showToast('Image size should not exceed 10MB.', 'error');
+            this.value = ''; // Reset input
+            return;
+        }
+        
+        try {
+            // Show loading state
+            showToast('Uploading and optimizing image...', 'info');
+            
+            // Compress and resize image
+            const compressedImage = await compressImage(file, 800, 0.85);
+            
+            // Check compressed size (localStorage limit is ~5MB)
+            if (compressedImage.length > 5 * 1024 * 1024) {
+                // Try with more compression
+                const moreCompressed = await compressImage(file, 600, 0.7);
+                if (moreCompressed.length > 5 * 1024 * 1024) {
+                    showToast('Image is too large even after compression. Please use a smaller image.', 'error');
+                    this.value = ''; // Reset input
+                    return;
+                }
+                updateAvatarEverywhere(moreCompressed);
+                localStorage.setItem('profilePhoto', moreCompressed);
+            } else {
+                updateAvatarEverywhere(compressedImage);
+                localStorage.setItem('profilePhoto', compressedImage);
+            }
+            
+            showToast('Profile photo updated successfully!', 'success');
+        } catch (error) {
+            console.error('Error uploading photo:', error);
+            showToast('Failed to upload photo. Please try again.', 'error');
+            this.value = ''; // Reset input
+        }
+    });
+}
+
+// Load saved photo on page load
+function loadSavedPhoto() {
+    const savedPhoto = localStorage.getItem('profilePhoto');
+    const removeBtn = document.getElementById('removePhotoBtn');
+    
+    if (savedPhoto) {
+        try {
+            updateAvatarEverywhere(savedPhoto);
+            // Show remove button
+            if (removeBtn) {
+                removeBtn.style.display = 'inline-flex';
+            }
+        } catch (error) {
+            console.error('Error loading saved photo:', error);
+            localStorage.removeItem('profilePhoto'); // Clear corrupted data
         }
     }
+}
+
+// Initialize photo on page load
+loadSavedPhoto();
+
+// Handle remove photo button
+const removePhotoBtn = document.getElementById('removePhotoBtn');
+if (removePhotoBtn) {
+    removePhotoBtn.addEventListener('click', function() {
+        // Confirm removal
+        if (confirm('Are you sure you want to remove your profile photo?')) {
+            // Remove from localStorage
+            localStorage.removeItem('profilePhoto');
+            
+            // Hide preview
+            const preview = document.getElementById('profilePhotoPreview');
+            if (preview) {
+                preview.style.display = 'none';
+            }
+            
+            // Show initials
+            const largeAvatar = document.querySelector('.profile-avatar-large');
+            if (largeAvatar) {
+                largeAvatar.style.display = 'flex';
+            }
+            
+            // Reset sidebar avatar to initials
+            const sidebarAvatar = document.querySelector('.sidebar .user-profile img');
+            if (sidebarAvatar) {
+                const userProfile = document.querySelector('.sidebar .user-profile');
+                const avatarDiv = document.createElement('div');
+                avatarDiv.className = 'avatar';
+                avatarDiv.textContent = 'CD';
+                sidebarAvatar.replaceWith(avatarDiv);
+            }
+            
+            // Reset top nav avatar to initials
+            const topNavAvatar = document.querySelector('.top-nav .avatar');
+            if (topNavAvatar) {
+                topNavAvatar.innerHTML = 'CD';
+            }
+            
+            // Hide remove button
+            this.style.display = 'none';
+            
+            // Reset file input
+            const fileInput = document.getElementById('profilePhotoInput');
+            if (fileInput) {
+                fileInput.value = '';
+            }
+            
+            showToast('Profile photo removed successfully!', 'success');
+        }
+    });
+}
+
+// Update remove button visibility when photo is uploaded
+const originalPhotoInput = document.getElementById('profilePhotoInput');
+if (originalPhotoInput) {
+    const originalListener = originalPhotoInput.addEventListener;
+    originalPhotoInput.addEventListener('change', function() {
+        setTimeout(() => {
+            const removeBtn = document.getElementById('removePhotoBtn');
+            if (removeBtn && localStorage.getItem('profilePhoto')) {
+                removeBtn.style.display = 'inline-flex';
+            }
+        }, 500);
+    });
 }
 
 // Handle profile editing
@@ -1329,10 +1457,18 @@ function showToast(message, type = 'info') {
         existingToast.remove();
     }
     
+    // Icon mapping for different types
+    const iconMap = {
+        'success': 'check-circle',
+        'error': 'exclamation-circle',
+        'warning': 'exclamation-triangle',
+        'info': 'info-circle'
+    };
+    
     const toast = document.createElement('div');
     toast.className = `toast-notification toast-${type}`;
     toast.innerHTML = `
-        <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
+        <i class="fas fa-${iconMap[type] || 'info-circle'}"></i>
         <span>${message}</span>
     `;
     
@@ -1341,9 +1477,10 @@ function showToast(message, type = 'info') {
     // Trigger animation
     setTimeout(() => toast.classList.add('show'), 100);
     
-    // Remove after 3 seconds
+    // Remove after appropriate time (longer for errors)
+    const duration = type === 'error' ? 5000 : 3000;
     setTimeout(() => {
         toast.classList.remove('show');
         setTimeout(() => toast.remove(), 300);
-    }, 3000);
+    }, duration);
 }

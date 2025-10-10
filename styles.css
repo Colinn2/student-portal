@@ -1001,6 +1001,17 @@ body {
 
 .btn-outline {
     background: transparent;
+    color: var(--destructive);
+    border: 2px solid var(--destructive);
+}
+
+.btn-outline:hover {
+    background: var(--destructive);
+    color: var(--destructive-foreground);
+}
+
+.btn-outline {
+    background: transparent;
     border: 2px solid var(--border);
     color: var(--foreground);
     box-shadow: none;
@@ -2805,14 +2816,19 @@ tr:last-child td {
 }
 
 .profile-photo-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
+    padding: 1.5rem;
 }
 
 .profile-avatar-large {
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
     color: white;
     display: flex;
     align-items: center;
@@ -2820,7 +2836,20 @@ tr:last-child td {
     font-size: 3rem;
     font-weight: 700;
     margin: 0 auto 1rem;
-    border: 5px solid rgba(67, 97, 238, 0.2);
+    border: 5px solid rgba(6, 182, 212, 0.2);
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.15);
+}
+
+.profile-photo-preview {
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.25);
+}
+
+.profile-photo-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    margin: 0.5rem 0;
 }
 
 .profile-photo-info h3 {
@@ -2828,7 +2857,15 @@ tr:last-child td {
 }
 
 .profile-photo-info p {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.profile-photo-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 1rem;
 }
 
 .input-group {
@@ -3784,6 +3821,22 @@ textarea.form-control {
 
 .toast-success i {
     color: var(--success);
+}
+
+.toast-error {
+    border-left: 4px solid var(--destructive);
+}
+
+.toast-error i {
+    color: var(--destructive);
+}
+
+.toast-warning {
+    border-left: 4px solid var(--warning);
+}
+
+.toast-warning i {
+    color: var(--warning);
 }
 
 .toast-info {
