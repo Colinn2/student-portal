@@ -1,0 +1,18 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Graduation cap icon -->
+  <g>
+    <!-- Cap base -->
+    <path d="M20 8L4 15L20 22L36 15L20 8Z" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" stroke-linejoin="round"/>
+    
+    <!-- Cap top -->
+    <path d="M20 22L36 15V25C36 28 28 32 20 32C12 32 4 28 4 25V15L20 22Z" fill="#0891b2" opacity="0.7"/>
+    
+    <!-- Tassel -->
+    <circle cx="36" cy="15" r="2" fill="#f59e0b"/>
+    <line x1="36" y1="17" x2="36" y2="22" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round"/>
+    
+    <!-- Book -->
+    <rect x="16" y="24" width="8" height="10" rx="1" fill="#ffffff" stroke="#06b6d4" stroke-width="1"/>
+    <line x1="20" y1="24" x2="20" y2="34" stroke="#06b6d4" stroke-width="1"/>
+  </g>
+</svg>

@@ -935,3 +935,415 @@ if (document.readyState === 'loading') {
 } else {
   initializePortal();
 }
+
+// Visual Grade Analyzer - What-If Calculator
+function calculateWhatIf() {
+    const nextCourse = document.getElementById('nextCourse').value;
+    const predictedGrade = parseFloat(document.getElementById('predictedGrade').value);
+    const courseWeight = parseFloat(document.getElementById('courseWeight').value);
+    
+    if (!nextCourse || !predictedGrade || !courseWeight) {
+        showToast('Missing Information', 'Please fill in all fields to calculate the impact.');
+        return;
+    }
+    
+    const currentGWA = 1.41;
+    const currentCredits = 16;
+    
+    let projectedGWA;
+    if (nextCourse === 'next-sem') {
+        projectedGWA = ((currentGWA * currentCredits) + (predictedGrade * courseWeight)) / (currentCredits + courseWeight);
+    } else {
+        const adjustmentFactor = courseWeight / 100;
+        projectedGWA = currentGWA + ((predictedGrade - currentGWA) * adjustmentFactor);
+    }
+    
+    projectedGWA = Math.max(1.00, Math.min(5.00, projectedGWA));
+    
+    const resultElement = document.getElementById('whatIfResult');
+    const projectedGWAElement = document.getElementById('projectedGWA');
+    const resultMessageElement = document.getElementById('resultMessage');
+    
+    projectedGWAElement.textContent = projectedGWA.toFixed(2);
+    
+    const difference = (currentGWA - projectedGWA).toFixed(2);
+    let message;
+    let icon = document.querySelector('.result-icon');
+    
+    if (projectedGWA < currentGWA) {
+        message = `Great! Your GWA will improve by ${Math.abs(difference)} points.`;
+        icon.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+        projectedGWAElement.style.color = '#10b981';
+    } else if (projectedGWA > currentGWA) {
+        message = `Warning: Your GWA may decrease by ${Math.abs(difference)} points. Consider improving your performance.`;
+        icon.style.background = 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)';
+        projectedGWAElement.style.color = '#f59e0b';
+    } else {
+        message = 'Your GWA will remain the same.';
+        icon.style.background = 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)';
+        projectedGWAElement.style.color = '#06b6d4';
+    }
+    
+    resultMessageElement.textContent = message;
+    resultElement.style.display = 'block';
+}
+
+// Anonymous Feedback Form Handler
+document.addEventListener('DOMContentLoaded', function() {
+    const feedbackForm = document.getElementById('feedbackForm');
+    if (feedbackForm) {
+        feedbackForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const category = document.getElementById('feedbackCategory').value;
+            const feedbackType = document.querySelector('input[name="feedbackType"]:checked').value;
+            const subject = document.getElementById('feedbackSubject').value;
+            const message = document.getElementById('feedbackMessage').value;
+            
+            if (!category || !message) {
+                showToast('Error', 'Please fill in all required fields.');
+                return;
+            }
+            
+            console.log('Feedback submitted:', { category, feedbackType, subject, message });
+            
+            document.getElementById('feedbackForm').style.display = 'none';
+            document.getElementById('feedbackSuccess').style.display = 'block';
+            
+            showToast('Success', 'Your anonymous feedback has been submitted!');
+            
+            setTimeout(() => {
+                feedbackForm.reset();
+            }, 500);
+        });
+    }
+});
+
+function resetFeedbackForm() {
+    document.getElementById('feedbackForm').style.display = 'block';
+    document.getElementById('feedbackSuccess').style.display = 'none';
+    document.getElementById('feedbackForm').reset();
+}
+
+// Initialize Chart for Grade Trends (using simple canvas drawing)
+function initGradeTrendChart() {
+    const canvas = document.getElementById('gradesTrendChart');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.offsetWidth;
+    canvas.height = 300;
+    
+    const data = [
+        { semester: 'Sem 1 2023', gwa: 1.65 },
+        { semester: 'Sem 2 2023', gwa: 1.52 },
+        { semester: 'Sem 1 2024', gwa: 1.48 },
+        { semester: 'Sem 2 2024', gwa: 1.41 }
+    ];
+    
+    const padding = 40;
+    const chartWidth = canvas.width - padding * 2;
+    const chartHeight = canvas.height - padding * 2;
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    ctx.strokeStyle = '#e6f6f6';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 4; i++) {
+        const y = padding + (chartHeight / 4) * i;
+        ctx.beginPath();
+        ctx.moveTo(padding, y);
+        ctx.lineTo(canvas.width - padding, y);
+        ctx.stroke();
+    }
+    
+    ctx.fillStyle = '#6b7a7a';
+    ctx.font = '12px Poppins';
+    ctx.textAlign = 'right';
+    for (let i = 0; i <= 4; i++) {
+        const grade = (1.0 + (i * 0.25)).toFixed(2);
+        const y = padding + (chartHeight / 4) * (4 - i);
+        ctx.fillText(grade, padding - 10, y + 4);
+    }
+    
+    ctx.strokeStyle = '#06b6d4';
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    
+    ctx.beginPath();
+    data.forEach((point, index) => {
+        const x = padding + (chartWidth / (data.length - 1)) * index;
+        const y = padding + chartHeight - ((point.gwa - 1.0) / 1.0) * chartHeight;
+        
+        if (index === 0) {
+            ctx.moveTo(x, y);
+        } else {
+            ctx.lineTo(x, y);
+        }
+    });
+    ctx.stroke();
+    
+    data.forEach((point, index) => {
+        const x = padding + (chartWidth / (data.length - 1)) * index;
+        const y = padding + chartHeight - ((point.gwa - 1.0) / 1.0) * chartHeight;
+        
+        ctx.fillStyle = '#06b6d4';
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.fillStyle = '#0b1a1a';
+        ctx.font = 'bold 14px Poppins';
+        ctx.textAlign = 'center';
+        ctx.fillText(point.gwa, x, y - 12);
+        
+        ctx.fillStyle = '#6b7a7a';
+        ctx.font = '11px Poppins';
+        ctx.fillText(point.semester, x, canvas.height - padding + 20);
+    });
+    
+    ctx.strokeStyle = '#10b981';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5, 5]);
+    const targetY = padding + chartHeight - ((1.50 - 1.0) / 1.0) * chartHeight;
+    ctx.beginPath();
+    ctx.moveTo(padding, targetY);
+    ctx.lineTo(canvas.width - padding, targetY);
+    ctx.stroke();
+    ctx.setLineDash([]);
+}
+
+if (document.getElementById('gradesTrendChart')) {
+    setTimeout(initGradeTrendChart, 100);
+}
+
+// ----------- PROFILE EDITING AND PHOTO UPLOAD -----------
+let isEditMode = false;
+
+// Handle photo upload
+const profilePhotoInput = document.getElementById('profilePhotoInput');
+if (profilePhotoInput) {
+    profilePhotoInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                alert('Please select a valid image file.');
+                return;
+            }
+            
+            // Validate file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Image size should not exceed 5MB.');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const imageUrl = event.target.result;
+                
+                // Update profile photo preview
+                const preview = document.getElementById('profilePhotoPreview');
+                if (preview) {
+                    preview.src = imageUrl;
+                    preview.style.display = 'block';
+                }
+                
+                // Update sidebar avatar
+                const sidebarAvatar = document.querySelector('.sidebar .user-profile img');
+                if (sidebarAvatar) {
+                    sidebarAvatar.src = imageUrl;
+                    sidebarAvatar.style.display = 'block';
+                }
+                
+                // Hide initials if they exist
+                const largeAvatar = document.querySelector('.profile-avatar-large');
+                if (largeAvatar) {
+                    largeAvatar.style.display = 'none';
+                }
+                
+                // Update top nav avatar
+                const topNavAvatar = document.querySelector('.top-nav .avatar');
+                if (topNavAvatar) {
+                    const img = topNavAvatar.querySelector('img') || document.createElement('img');
+                    img.src = imageUrl;
+                    img.style.width = '100%';
+                    img.style.height = '100%';
+                    img.style.objectFit = 'cover';
+                    img.style.borderRadius = '50%';
+                    if (!topNavAvatar.querySelector('img')) {
+                        topNavAvatar.innerHTML = '';
+                        topNavAvatar.appendChild(img);
+                    }
+                }
+                
+                // Save to localStorage
+                localStorage.setItem('profilePhoto', imageUrl);
+                
+                showToast('Profile photo updated successfully!', 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+}
+
+// Load saved photo on page load
+const savedPhoto = localStorage.getItem('profilePhoto');
+if (savedPhoto) {
+    const preview = document.getElementById('profilePhotoPreview');
+    if (preview) {
+        preview.src = savedPhoto;
+        preview.style.display = 'block';
+    }
+    
+    const largeAvatar = document.querySelector('.profile-avatar-large');
+    if (largeAvatar) {
+        largeAvatar.style.display = 'none';
+    }
+    
+    const sidebarAvatar = document.querySelector('.sidebar .user-profile img');
+    if (sidebarAvatar) {
+        sidebarAvatar.src = savedPhoto;
+        sidebarAvatar.style.display = 'block';
+    }
+    
+    const topNavAvatar = document.querySelector('.top-nav .avatar');
+    if (topNavAvatar) {
+        const img = topNavAvatar.querySelector('img') || document.createElement('img');
+        img.src = savedPhoto;
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.objectFit = 'cover';
+        img.style.borderRadius = '50%';
+        if (!topNavAvatar.querySelector('img')) {
+            topNavAvatar.innerHTML = '';
+            topNavAvatar.appendChild(img);
+        }
+    }
+}
+
+// Handle profile editing
+const editProfileBtn = document.getElementById('editProfileBtn');
+const profileForm = document.getElementById('profileForm');
+
+// Define editable fields with their data attributes
+const editableFields = [
+    { selector: '.form-grid .input-group:nth-child(1) .form-display', key: 'firstName', label: 'First Name' },
+    { selector: '.form-grid .input-group:nth-child(2) .form-display', key: 'lastName', label: 'Last Name' },
+    { selector: '.input-group:has(label [class*="envelope"]) .form-display', key: 'email', label: 'Email' },
+    { selector: '.input-group:has(label [class*="phone"]) .form-display', key: 'phone', label: 'Phone' },
+    { selector: '.input-group:has(label [class*="map-marker"]) .form-display', key: 'address', label: 'Address' },
+    { selector: '.input-group:has(label [class*="calendar"]) .form-display', key: 'dob', label: 'Date of Birth' }
+];
+
+// Load saved profile data
+function loadProfileData() {
+    editableFields.forEach(field => {
+        const savedValue = localStorage.getItem(`profile_${field.key}`);
+        if (savedValue) {
+            const element = profileForm.querySelector(field.selector);
+            if (element) {
+                if (isEditMode) {
+                    element.querySelector('input').value = savedValue;
+                } else {
+                    element.textContent = savedValue;
+                }
+            }
+        }
+    });
+    
+    // Update name in header
+    const firstName = localStorage.getItem('profile_firstName');
+    const lastName = localStorage.getItem('profile_lastName');
+    if (firstName && lastName) {
+        const profileName = document.getElementById('profileName');
+        if (profileName) {
+            profileName.textContent = `${firstName} ${lastName}`;
+        }
+        
+        // Update sidebar name
+        const sidebarName = document.querySelector('.sidebar .user-profile h3');
+        if (sidebarName) {
+            sidebarName.textContent = `${firstName} ${lastName}`;
+        }
+    }
+}
+
+// Toggle edit mode
+function toggleEditMode() {
+    isEditMode = !isEditMode;
+    
+    if (isEditMode) {
+        // Switch to edit mode
+        editProfileBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+        editProfileBtn.classList.add('btn-primary');
+        
+        editableFields.forEach(field => {
+            const element = profileForm.querySelector(field.selector);
+            if (element) {
+                const currentValue = element.textContent;
+                element.innerHTML = `<input type="text" class="form-input" value="${currentValue}" placeholder="${field.label}">`;
+            }
+        });
+    } else {
+        // Switch to view mode and save data
+        editProfileBtn.innerHTML = '<i class="fas fa-edit"></i> Edit Profile';
+        editProfileBtn.classList.remove('btn-primary');
+        
+        let hasChanges = false;
+        editableFields.forEach(field => {
+            const element = profileForm.querySelector(field.selector);
+            if (element) {
+                const input = element.querySelector('input');
+                if (input) {
+                    const newValue = input.value.trim();
+                    if (newValue) {
+                        localStorage.setItem(`profile_${field.key}`, newValue);
+                        element.innerHTML = newValue;
+                        hasChanges = true;
+                    }
+                }
+            }
+        });
+        
+        if (hasChanges) {
+            loadProfileData();
+            showToast('Profile updated successfully!', 'success');
+        }
+    }
+}
+
+if (editProfileBtn) {
+    editProfileBtn.addEventListener('click', toggleEditMode);
+}
+
+// Load profile data on page load
+loadProfileData();
+
+// Toast notification helper
+function showToast(message, type = 'info') {
+    // Remove existing toast if any
+    const existingToast = document.querySelector('.toast-notification');
+    if (existingToast) {
+        existingToast.remove();
+    }
+    
+    const toast = document.createElement('div');
+    toast.className = `toast-notification toast-${type}`;
+    toast.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
+        <span>${message}</span>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    // Trigger animation
+    setTimeout(() => toast.classList.add('show'), 100);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}

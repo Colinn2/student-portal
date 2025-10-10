@@ -22,7 +22,7 @@
                 </svg>
             </button>
             <div class="logo-section">
-                <div class="logo"></div>
+                <img src="logo.svg" alt="ICCT Logo" class="logo-image">
                 <h1>Student Portal</h1>
             </div>
             <div class="nav-center">
@@ -141,6 +141,14 @@
                             <circle cx="12" cy="7" r="4"></circle>
                         </svg>
                         <span>Profile</span>
+                    </a>
+                    <a href="#feedback" class="nav-item" data-page="feedback">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            <line x1="9" y1="10" x2="15" y2="10"></line>
+                            <line x1="12" y1="7" x2="12" y2="13"></line>
+                        </svg>
+                        <span>Anonymous Feedback</span>
                     </a>
                 </div>
                 <!-- Resources -->
@@ -502,6 +510,260 @@
                         <div>
                             <h3>Dean's List</h3>
                             <p>Congratulations! You're on track for Dean's List honors with your current 1.41 GWA. Keep up the excellent work!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Grade Analyzer -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                            </svg>
+                            Visual Grade Analyzer
+                        </h3>
+                    </div>
+                    <div class="card-content">
+                        <!-- Performance Trend Chart -->
+                        <div class="analyzer-section">
+                            <h4>Performance Trends Over Time</h4>
+                            <div class="chart-container">
+                                <canvas id="gradesTrendChart"></canvas>
+                            </div>
+                            <div class="chart-legend">
+                                <div class="legend-item">
+                                    <span class="legend-dot" style="background: #06b6d4;"></span>
+                                    <span>Semester GWA</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-dot" style="background: #10b981;"></span>
+                                    <span>Target Goal (1.50)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Course Performance Breakdown -->
+                        <div class="analyzer-section">
+                            <h4>Course Performance Distribution</h4>
+                            <div class="performance-bars">
+                                <div class="performance-item">
+                                    <div class="performance-label">
+                                        <span>Excellent (1.00-1.49)</span>
+                                        <span class="performance-value">3 courses</span>
+                                    </div>
+                                    <div class="performance-bar">
+                                        <div class="performance-fill" style="width: 60%; background: #10b981;"></div>
+                                    </div>
+                                </div>
+                                <div class="performance-item">
+                                    <div class="performance-label">
+                                        <span>Very Good (1.50-1.99)</span>
+                                        <span class="performance-value">2 courses</span>
+                                    </div>
+                                    <div class="performance-bar">
+                                        <div class="performance-fill" style="width: 40%; background: #06b6d4;"></div>
+                                    </div>
+                                </div>
+                                <div class="performance-item">
+                                    <div class="performance-label">
+                                        <span>Good (2.00-2.49)</span>
+                                        <span class="performance-value">0 courses</span>
+                                    </div>
+                                    <div class="performance-bar">
+                                        <div class="performance-fill" style="width: 0%; background: #f59e0b;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- What-If Scenario Simulator -->
+                        <div class="analyzer-section what-if-simulator">
+                            <h4>What-If Scenario Simulator</h4>
+                            <p class="section-description">Predict how your next grades will affect your final GWA</p>
+                            
+                            <div class="simulator-inputs">
+                                <div class="form-group">
+                                    <label for="nextCourse">Next Course/Assessment</label>
+                                    <select id="nextCourse" class="form-control">
+                                        <option value="">Select course...</option>
+                                        <option value="quiz">Upcoming Quiz</option>
+                                        <option value="exam">Final Examination</option>
+                                        <option value="project">Major Project</option>
+                                        <option value="next-sem">Next Semester (Full)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="predictedGrade">Predicted Grade/Score</label>
+                                    <input type="number" id="predictedGrade" class="form-control" placeholder="Enter grade (1.00-5.00) or score (%)" step="0.25" min="1" max="5">
+                                </div>
+                                <div class="form-group">
+                                    <label for="courseWeight">Weight/Credits</label>
+                                    <input type="number" id="courseWeight" class="form-control" placeholder="Credits or % weight" step="1" min="1" max="6" value="3">
+                                </div>
+                                <button class="btn btn-primary" onclick="calculateWhatIf()">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                    Calculate Impact
+                                </button>
+                            </div>
+
+                            <div id="whatIfResult" class="what-if-result" style="display: none;">
+                                <div class="result-card">
+                                    <div class="result-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                        </svg>
+                                    </div>
+                                    <div class="result-content">
+                                        <h5>Projected GWA</h5>
+                                        <div class="projected-gwa">
+                                            <span class="current-gwa">1.41</span>
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                <polyline points="12 5 19 12 12 19"></polyline>
+                                            </svg>
+                                            <span class="new-gwa" id="projectedGWA">1.38</span>
+                                        </div>
+                                        <p class="result-message" id="resultMessage">Great! Your GWA will improve by 0.03 points.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Anonymous Feedback Page -->
+            <div id="feedback-page" class="page">
+                <div class="page-header">
+                    <h2>Anonymous Feedback & Suggestions</h2>
+                    <p>Your voice matters. Share your thoughts anonymously to help improve our institution.</p>
+                </div>
+
+                <div class="card">
+                    <div class="feedback-intro">
+                        <div class="feedback-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                        </div>
+                        <h3>Submit Anonymous Feedback</h3>
+                        <p>Your feedback is completely anonymous. We value your honest opinions about classes, teachers, facilities, or any aspect of student life.</p>
+                    </div>
+
+                    <form id="feedbackForm" class="feedback-form">
+                        <div class="form-group">
+                            <label for="feedbackCategory">Category</label>
+                            <select id="feedbackCategory" class="form-control" required>
+                                <option value="">Select a category...</option>
+                                <option value="instructor">Instructor/Teaching Quality</option>
+                                <option value="course">Course Content</option>
+                                <option value="facilities">Facilities & Equipment</option>
+                                <option value="administrative">Administrative Services</option>
+                                <option value="library">Library Resources</option>
+                                <option value="cafeteria">Cafeteria/Dining</option>
+                                <option value="technology">Technology & Systems</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="feedbackType">Feedback Type</label>
+                            <div class="feedback-type-options">
+                                <label class="radio-option">
+                                    <input type="radio" name="feedbackType" value="suggestion" checked>
+                                    <span class="radio-label">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <path d="M12 16v-4"></path>
+                                            <path d="M12 8h.01"></path>
+                                        </svg>
+                                        Suggestion
+                                    </span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="feedbackType" value="complaint">
+                                    <span class="radio-label">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                                        </svg>
+                                        Complaint
+                                    </span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="feedbackType" value="compliment">
+                                    <span class="radio-label">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                                            <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                                            <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                                        </svg>
+                                        Compliment
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="feedbackSubject">Subject (Optional)</label>
+                            <input type="text" id="feedbackSubject" class="form-control" placeholder="Brief subject or title">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="feedbackMessage">Your Feedback</label>
+                            <textarea id="feedbackMessage" class="form-control" rows="6" placeholder="Share your thoughts, suggestions, or concerns..." required></textarea>
+                            <small class="form-hint">Be specific and constructive. Remember, this is anonymous.</small>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                </svg>
+                                Submit Anonymously
+                            </button>
+                            <button type="reset" class="btn btn-secondary">Clear Form</button>
+                        </div>
+                    </form>
+
+                    <div id="feedbackSuccess" class="feedback-success" style="display: none;">
+                        <div class="success-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </div>
+                        <h3>Thank You!</h3>
+                        <p>Your anonymous feedback has been submitted successfully. We appreciate you taking the time to help us improve.</p>
+                        <button class="btn btn-secondary" onclick="resetFeedbackForm()">Submit Another Feedback</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Why Your Feedback Matters</h3>
+                    <div class="feedback-benefits">
+                        <div class="benefit-item">
+                            <div class="benefit-icon">🔒</div>
+                            <h4>100% Anonymous</h4>
+                            <p>No tracking, no identification. Your privacy is guaranteed.</p>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">👂</div>
+                            <h4>We Listen</h4>
+                            <p>Every feedback is reviewed by the relevant department.</p>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">⚡</div>
+                            <h4>Drive Change</h4>
+                            <p>Your input directly influences improvements and decisions.</p>
                         </div>
                     </div>
                 </div>
