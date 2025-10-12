@@ -92,30 +92,172 @@ function showToast(title, message) {
 // ----------- SCHEDULE DATA -----------
 const scheduleContent = document.getElementById("scheduleContent");
 const scheduleData = [
-  { subject: "Database Systems", day: "Mon & Wed", time: "10:00 AM - 11:30 AM", room: "CS301", instructor: 'Dr. Reyes', units: 3 },
-  { subject: "Web Development", day: "Tue & Thu", time: "1:00 PM - 2:30 PM", room: "CS302", instructor: 'Ms. Cruz', units: 3 },
-  { subject: "Network Security", day: "Fri", time: "8:00 AM - 11:00 AM", room: "CS303", instructor: 'Mr. dela Vega', units: 3 },
-  { subject: "Data Structures", day: "Tue & Thu", time: "10:00 AM - 11:30 AM", room: "CS304", instructor: 'Ms. Santos', units: 3 },
+  { 
+    subject: "Integrative Programming and Technologies 2", 
+    code: "OLIPT2",
+    day: "Monday", 
+    time: "8:00 AM - 11:00 AM", 
+    room: "Room 301, Building A", 
+    instructor: 'Chiong, Joriz Dedal', 
+    units: 4,
+    type: 'lecture',
+    color: '#3b82f6',
+    section: 'LFAU411A075'
+  },
+  { 
+    subject: "System Administration and Maintenance", 
+    code: "OLSA01",
+    day: "Tuesday", 
+    time: "1:00 PM - 4:00 PM", 
+    room: "Lab 201, Building B", 
+    instructor: 'Chiong, Joriz Dedal', 
+    units: 4,
+    type: 'lab',
+    color: '#10b981',
+    section: 'LFAU411A075'
+  },
+  { 
+    subject: "Practicum (243 Hours)", 
+    code: "OLITPRAC1",
+    day: "Wednesday", 
+    time: "9:00 AM - 5:00 PM", 
+    room: "Industry Partner Site", 
+    instructor: 'Vilog, Jericho Manlangit', 
+    units: 3,
+    type: 'practicum',
+    color: '#f59e0b',
+    section: 'LFAU411A075'
+  },
+  { 
+    subject: "Applications Development and Emerging Technologies", 
+    code: "OLCC06",
+    day: "Thursday", 
+    time: "10:00 AM - 1:00 PM", 
+    room: "Room 405, Building A", 
+    instructor: 'Chiong, Joriz Dedal', 
+    units: 4,
+    type: 'lecture',
+    color: '#8b5cf6',
+    section: 'LFAU333A004'
+  },
+  { 
+    subject: "Information Assurance and Security 2", 
+    code: "OLIAS2",
+    day: "Friday", 
+    time: "2:00 PM - 5:00 PM", 
+    room: "Online via Zoom", 
+    instructor: 'Chiong, Joriz Dedal', 
+    units: 4,
+    type: 'online',
+    color: '#ec4899',
+    section: 'LFAU333A004'
+  },
+  { 
+    subject: "Event Driven Programming", 
+    code: "OLPFI1",
+    day: "Monday", 
+    time: "2:00 PM - 5:00 PM", 
+    room: "Lab 105, Building C", 
+    instructor: 'Chiong, Joriz Dedal', 
+    units: 4,
+    type: 'lab',
+    color: '#06b6d4',
+    section: 'LFAU333A004'
+  },
+  { 
+    subject: "Capstone Project and Research 2", 
+    code: "OLCAPS2",
+    day: "Tuesday", 
+    time: "9:00 AM - 12:00 PM", 
+    room: "Room 302, Building A", 
+    instructor: 'Vilog, Jericho Manlangit', 
+    units: 3,
+    type: 'lecture',
+    color: '#f97316',
+    section: 'LFAU333A004'
+  },
+  { 
+    subject: "Practicum (243 Hours)", 
+    code: "OLITPRAC2",
+    day: "Thursday", 
+    time: "2:00 PM - 5:00 PM", 
+    room: "Industry Partner Site", 
+    instructor: 'Vilog, Jericho Manlangit', 
+    units: 3,
+    type: 'practicum',
+    color: '#84cc16',
+    section: 'LFAU411A075'
+  }
 ];
 
 function renderSchedule() {
   if (!scheduleContent) return;
-  scheduleContent.innerHTML = scheduleData.map(item => `
-    <div class="schedule-item">
-      <div class="schedule-avatar">${item.subject.split(' ').map(w=>w[0]).slice(0,2).join('')}</div>
-      <div style="flex:1">
-        <div class="schedule-header">
-          <div class="schedule-title"><h4>${item.subject}</h4><div class="grade-details">${item.instructor} • ${item.units} units</div></div>
-          <div class="schedule-badges"><span class="badge badge-primary">Ongoing</span></div>
+  
+  const dayFilter = document.getElementById('dayFilter')?.value || 'all';
+  const typeFilter = document.getElementById('typeFilter')?.value || 'all';
+  
+  const filteredData = scheduleData.filter(item => {
+    const dayMatch = dayFilter === 'all' || item.day.toLowerCase() === dayFilter;
+    const typeMatch = typeFilter === 'all' || item.type === typeFilter;
+    return dayMatch && typeMatch;
+  });
+  
+  if (filteredData.length === 0) {
+    scheduleContent.innerHTML = '<p style="text-align:center; padding:2rem; color:var(--muted-foreground);">No classes match your filters.</p>';
+    return;
+  }
+  
+  scheduleContent.innerHTML = filteredData.map(item => `
+    <div class="schedule-item-enhanced" style="border-left-color: ${item.color};">
+      <div class="schedule-item-header">
+        <div class="schedule-item-main">
+          <div class="schedule-avatar" style="background: ${item.color}20; color: ${item.color};">
+            ${item.code}
+          </div>
+          <div class="schedule-item-info">
+            <h4>${item.subject}</h4>
+            <p class="schedule-meta">
+              <span><i class="fas fa-user"></i> ${item.instructor}</span>
+              <span><i class="fas fa-book"></i> ${item.units} units</span>
+              <span><i class="fas fa-users"></i> ${item.section}</span>
+            </p>
+          </div>
         </div>
-        <div class="schedule-details">
-          <div class="schedule-detail">📅 ${item.day}</div>
-          <div class="schedule-detail">⏰ ${item.time}</div>
-          <div class="schedule-detail">🏫 ${item.room}</div>
+        <div class="schedule-item-badge">
+          <span class="badge ${item.type === 'online' ? 'badge-info' : item.type === 'lab' ? 'badge-success' : 'badge-primary'}">
+            ${item.type === 'online' ? '<i class="fas fa-video"></i>' : item.type === 'lab' ? '<i class="fas fa-flask"></i>' : '<i class="fas fa-book-open"></i>'}
+            ${item.type.charAt(0).toUpperCase() + item.type.slice(1)}
+          </span>
+        </div>
+      </div>
+      <div class="schedule-item-details">
+        <div class="detail-pill">
+          <i class="fas fa-calendar-day"></i>
+          <strong>${item.day}</strong>
+        </div>
+        <div class="detail-pill">
+          <i class="fas fa-clock"></i>
+          <strong>${item.time}</strong>
+        </div>
+        <div class="detail-pill">
+          <i class="fas fa-map-marker-alt"></i>
+          <strong>${item.room}</strong>
         </div>
       </div>
     </div>
   `).join("");
+}
+
+function filterSchedule() {
+  renderSchedule();
+}
+
+function printSchedule() {
+  window.print();
+}
+
+function exportSchedule() {
+  showToast('info', 'Export feature coming soon!');
 }
 
 // Render schedule on load
@@ -547,6 +689,7 @@ const storeItems = document.getElementById("storeItems");
 const cartItems = document.getElementById("cartItems");
 const cartFooter = document.getElementById("cartFooter");
 const cartTotal = document.getElementById("cartTotal");
+const cartContainer = document.getElementById("cartContainer");
 
 const items = [
   { id: 1, name: "PE Uniform", desc: "Physical Education uniform", price: 500, img: 'https://via.placeholder.com/80x80?text=Uniform' },
@@ -570,7 +713,7 @@ function renderStore() {
       </div>
       <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:flex-end">
         <div class="item-price">₱${item.price}</div>
-        <button class="btn btn-primary btn-sm" onclick="addToCart(${item.id})">Add</button>
+        <button class="btn btn-primary btn-sm" onclick="addToCartOld(${item.id})">Add</button>
       </div>
     </div>
   `).join("");
@@ -579,6 +722,91 @@ function renderStore() {
 // Render store on load
 if (storeItems) {
   renderStore();
+}
+
+// ----------- ENHANCED CART SYSTEM FOR ONLINE PAYMENT -----------
+function addToCart(itemName, itemPrice) {
+  const existing = cart.find(c => c.name === itemName);
+  if (existing) {
+    showToast("Already Added", `${itemName} is already in your cart.`);
+    return;
+  }
+  
+  cart.push({ name: itemName, price: itemPrice });
+  renderEnhancedCart();
+  showToast("Added to Cart", `${itemName} added to cart.`);
+}
+
+function removeFromEnhancedCart(itemName) {
+  cart = cart.filter(c => c.name !== itemName);
+  renderEnhancedCart();
+  showToast("Removed", `${itemName} removed from cart.`);
+}
+
+function renderEnhancedCart() {
+  if (!cartItems || !cartContainer) return;
+  
+  if (cart.length === 0) {
+    cartContainer.style.display = "none";
+  } else {
+    cartContainer.style.display = "block";
+    cartItems.innerHTML = cart.map(item => `
+      <div class="cart-item">
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-price">₱${item.price.toFixed(2)}</div>
+        </div>
+        <button class="cart-item-remove" onclick="removeFromEnhancedCart('${item.name.replace(/'/g, "\\'")}')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    `).join("");
+    
+    const total = cart.reduce((t, i) => t + i.price, 0);
+    cartTotal.textContent = "₱" + total.toFixed(2);
+  }
+}
+
+function clearCart() {
+  cart = [];
+  renderEnhancedCart();
+  showToast("Cart Cleared", "All items removed from cart.");
+}
+
+function proceedToPayment() {
+  if (cart.length === 0) {
+    showToast("Empty Cart", "Add items to cart before proceeding.");
+    return;
+  }
+  
+  const total = cart.reduce((t, i) => t + i.price, 0);
+  const refCode = "PAY" + Date.now().toString().slice(-8);
+  
+  // Simulate payment processing
+  showToast("Payment Processing", `Processing payment of ₱${total.toFixed(2)}...`);
+  
+  setTimeout(() => {
+    showToast("Payment Successful", `Payment completed! Reference: ${refCode}`);
+    cart = [];
+    renderEnhancedCart();
+  }, 1500);
+}
+
+function generatePaymentCode() {
+  const refCode = "ICCT" + Date.now().toString().slice(-10);
+  showToast("Payment Code Generated", `Your payment code: ${refCode}. Valid for 24 hours.`);
+}
+
+function downloadStatement() {
+  showToast("Downloading", "Your payment statement is being generated...");
+  setTimeout(() => {
+    showToast("Download Complete", "Statement downloaded successfully.");
+  }, 1000);
+}
+
+// Initialize cart on page load
+if (cartItems && cartContainer) {
+  renderEnhancedCart();
 }
 
 // ----------- ORF PDF GENERATION (client-side using jsPDF) -----------
@@ -598,7 +826,7 @@ async function generateORFPDF(){
   doc.save('ORF-2024-00001.pdf');
 }
 
-function renderCart() {
+function renderCartOld() {
   if (cart.length === 0) {
     cartItems.innerHTML = `<p class="empty-state">Your cart is empty</p>`;
     cartFooter.style.display = "none";
@@ -624,12 +852,12 @@ function renderCart() {
   }
 }
 
-function addToCart(id) {
+function addToCartOld(id) {
   const item = items.find(i => i.id === id);
   const existing = cart.find(c => c.id === id);
   if (existing) existing.qty++;
   else cart.push({ ...item, qty: 1 });
-  renderCart();
+  renderCartOld();
   showToast("Added to Cart", `${item.name} added to cart.`);
 }
 
@@ -939,7 +1167,8 @@ if (document.readyState === 'loading') {
 // Visual Grade Analyzer - What-If Calculator
 function calculateWhatIf() {
     const nextCourse = document.getElementById('nextCourse').value;
-    const predictedGrade = parseFloat(document.getElementById('predictedGrade').value);
+    const predictedGradeSelect = document.getElementById('predictedGrade');
+    const predictedGrade = parseFloat(predictedGradeSelect.value);
     const courseWeight = parseFloat(document.getElementById('courseWeight').value);
     
     if (!nextCourse || !predictedGrade || !courseWeight) {
@@ -947,8 +1176,8 @@ function calculateWhatIf() {
         return;
     }
     
-    const currentGWA = 1.41;
-    const currentCredits = 16;
+    const currentGWA = 1.47;
+    const currentCredits = 29;
     
     let projectedGWA;
     if (nextCourse === 'next-sem') {
@@ -986,6 +1215,14 @@ function calculateWhatIf() {
     
     resultMessageElement.textContent = message;
     resultElement.style.display = 'block';
+}
+
+// Toggle Grade Scale Legend
+function toggleGradeScale() {
+    const legend = document.getElementById('gradeScaleLegend');
+    if (legend) {
+        legend.style.display = legend.style.display === 'none' ? 'block' : 'none';
+    }
 }
 
 // Anonymous Feedback Form Handler
