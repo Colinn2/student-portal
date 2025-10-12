@@ -1547,9 +1547,9 @@
                 </div>
 
                 <div class="tabs">
-                    <button class="tab-btn active" data-tab="fees">
-                        <i class="fas fa-list-alt"></i>
-                        Fee Details
+                    <button class="tab-btn active" data-tab="current">
+                        <i class="fas fa-file-invoice"></i>
+                        Current Charges
                     </button>
                     <button class="tab-btn" data-tab="history">
                         <i class="fas fa-history"></i>
@@ -1561,12 +1561,101 @@
                     </button>
                 </div>
 
-                <!-- Fee Details Tab -->
-                <div id="fees-tab" class="tab-content active">
+                <!-- Current Charges Tab -->
+                <div id="current-tab" class="tab-content active">
                     <div class="card">
                         <div class="card-header">
-                            <h3>Assessment Fees - 2nd Semester, AY 2024-2025</h3>
+                            <h3>Current Assessment - 2nd Semester, AY 2024-2025</h3>
                             <span class="badge badge-warning">Unpaid</span>
+                        </div>
+                        <div class="fees-breakdown">
+                            <div class="fee-category">
+                                <h4><i class="fas fa-graduation-cap"></i> Tuition & School Fees</h4>
+                                <div class="fee-items">
+                                    <div class="fee-item">
+                                        <span class="fee-name">Tuition Fee (29 units)</span>
+                                        <span class="fee-amount">₱5,800.00</span>
+                                    </div>
+                                    <div class="fee-item">
+                                        <span class="fee-name">Laboratory Fee</span>
+                                        <span class="fee-amount">₱450.00</span>
+                                    </div>
+                                    <div class="fee-item">
+                                        <span class="fee-name">Library Fee</span>
+                                        <span class="fee-amount">₱200.00</span>
+                                    </div>
+                                    <div class="fee-item">
+                                        <span class="fee-name">Registration Fee</span>
+                                        <span class="fee-amount">₱300.00</span>
+                                    </div>
+                                </div>
+                                <div class="fee-subtotal">
+                                    <span>Subtotal:</span>
+                                    <span>₱6,750.00</span>
+                                </div>
+                            </div>
+
+                            <div class="fee-category">
+                                <h4><i class="fas fa-tools"></i> Miscellaneous Fees</h4>
+                                <div class="fee-items">
+                                    <div class="fee-item">
+                                        <span class="fee-name">Student Activity Fee</span>
+                                        <span class="fee-amount">₱150.00</span>
+                                    </div>
+                                    <div class="fee-item">
+                                        <span class="fee-name">Insurance</span>
+                                        <span class="fee-amount">₱100.00</span>
+                                    </div>
+                                    <div class="fee-item">
+                                        <span class="fee-name">ID Maintenance</span>
+                                        <span class="fee-amount">₱79.70</span>
+                                    </div>
+                                </div>
+                                <div class="fee-subtotal">
+                                    <span>Subtotal:</span>
+                                    <span>₱329.70</span>
+                                </div>
+                            </div>
+
+                            <div class="fee-total-section">
+                                <div class="fee-total">
+                                    <span>Total Assessment:</span>
+                                    <span>₱7,079.70</span>
+                                </div>
+                                <div class="fee-discount">
+                                    <span>Discount/Scholarship:</span>
+                                    <span>-₱0.00</span>
+                                </div>
+                                <div class="fee-grand-total">
+                                    <span>Amount Due:</span>
+                                    <span>₱7,079.70</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-action-footer">
+                            <div class="payment-info-text">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Payment deadline: <strong>January 31, 2025</strong></span>
+                            </div>
+                            <div class="payment-actions-group">
+                                <button class="btn btn-outline" onclick="window.print()">
+                                    <i class="fas fa-print"></i> Print Statement
+                                </button>
+                                <button class="btn btn-primary btn-lg" onclick="generatePaymentCode()">
+                                    <i class="fas fa-qrcode"></i> Pay Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fee Details Tab (Hidden by default, shows all possible fees) -->
+                <div id="fees-tab" class="tab-content" style="display:none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>All Available Fees</h3>
+                            <p class="text-muted">Complete list of fees (for reference only)</p>
                         </div>
                         <div class="fees-table-container">
                             <table class="fees-table">

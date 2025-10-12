@@ -3883,6 +3883,145 @@ tr:last-child td {
     flex: 1;
 }
 
+/* Enhanced Fee Breakdown Styles */
+.fees-breakdown {
+    padding: 1.5rem;
+}
+
+.fee-category {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--border);
+}
+
+.fee-category:last-of-type {
+    border-bottom: none;
+}
+
+.fee-category h4 {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.fee-category h4 i {
+    font-size: 1.25rem;
+}
+
+.fee-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.fee-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.875rem 1rem;
+    background: rgba(67, 97, 238, 0.02);
+    border-radius: 8px;
+    transition: background-color 0.15s, transform 0.15s;
+}
+
+.fee-item:hover {
+    background: rgba(67, 97, 238, 0.05);
+    transform: translateX(3px);
+}
+
+.fee-item .fee-name {
+    font-size: 0.95rem;
+    color: var(--foreground);
+    font-weight: 500;
+}
+
+.fee-item .fee-amount {
+    font-size: 1rem;
+    color: var(--foreground);
+    font-weight: 600;
+}
+
+.fee-subtotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    margin-top: 0.5rem;
+    background: rgba(67, 97, 238, 0.05);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--foreground);
+}
+
+.fee-total-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(139, 92, 246, 0.05));
+    border-radius: 12px;
+    border: 2px solid var(--border);
+}
+
+.fee-total,
+.fee-discount {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    font-size: 1rem;
+    color: var(--foreground);
+}
+
+.fee-discount {
+    color: var(--success);
+}
+
+.fee-grand-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 0 0 0;
+    margin-top: 1rem;
+    border-top: 2px solid var(--border);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.payment-action-footer {
+    padding: 1.5rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.payment-info-text {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    color: var(--muted-foreground);
+}
+
+.payment-info-text i {
+    color: var(--primary);
+    font-size: 1.1rem;
+}
+
+.payment-actions-group {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
 /* Fees Table */
 .fees-table-container {
     overflow-x: auto;
@@ -3932,13 +4071,6 @@ tr:last-child td {
 .total-row strong {
     font-weight: 700;
     color: var(--primary);
-}
-
-.payment-action-footer {
-    padding: 1.5rem;
-    border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: flex-end;
 }
 
 /* Payment History Styles */
@@ -5214,6 +5346,63 @@ textarea.form-control {
     .history-amount {
         width: 100%;
         text-align: left;
+    }
+
+    /* Fee Breakdown Mobile Styles */
+    .fees-breakdown {
+        padding: 1rem;
+    }
+
+    .fee-category {
+        margin-bottom: 1.5rem;
+    }
+
+    .fee-category h4 {
+        font-size: 1rem;
+    }
+
+    .fee-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+        padding: 0.75rem;
+    }
+
+    .fee-item .fee-name {
+        font-size: 0.9rem;
+    }
+
+    .fee-item .fee-amount {
+        font-size: 1rem;
+        align-self: flex-end;
+    }
+
+    .fee-total-section {
+        padding: 1rem;
+    }
+
+    .fee-grand-total {
+        font-size: 1.15rem;
+    }
+
+    .payment-action-footer {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 1rem;
+    }
+
+    .payment-info-text {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .payment-actions-group {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .payment-actions-group .btn {
+        width: 100%;
     }
 
     .fees-table-container {
