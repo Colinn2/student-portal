@@ -67,6 +67,24 @@ function navigateTo(pageId) {
   document.querySelector(`.nav-item[data-page="${pageId}"]`).click();
 }
 
+// Show notifications directly from top nav
+function showNotifications() {
+  const pages = document.querySelectorAll(".page");
+  const navItems = document.querySelectorAll(".nav-item");
+  
+  // Hide all pages
+  pages.forEach((p) => p.classList.remove("active"));
+  
+  // Show notifications page
+  const notificationsPage = document.getElementById("notifications-page");
+  if (notificationsPage) {
+    notificationsPage.classList.add("active");
+  }
+  
+  // Remove active state from all nav items
+  navItems.forEach((item) => item.classList.remove("active"));
+}
+
 // ----------- LEDGER TAB SWITCHING -----------
 const tabButtons = document.querySelectorAll(".tab-btn");
 const tabContents = document.querySelectorAll(".tab-content");
