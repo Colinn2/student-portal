@@ -19,19 +19,8 @@
                     <line x1="3" y1="12" x2="21" y2="12"></line>
                     <line x1="3" y1="6" x2="21" y2="6"></line>
                     <line x1="3" y1="18" x2="21" y2="18"></line>
-                
+                </svg>
                 <h1>Student Portal</h1>
-            </div>
-            <div class="nav-center">
-                <form id="searchForm" class="search-form" onsubmit="return false">
-                    <input id="globalSearch" type="search" placeholder="Search courses, announcements, messages..." aria-label="Search">
-                    <button class="btn-icon" aria-label="Search" onclick="handleSearch()">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="7"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
-                    </button>
-                </form>
             </div>
         </div>
         <div class="nav-right">
@@ -188,6 +177,67 @@
                 </div>
 
                 <div class="dashboard-grid">
+                    <!-- Account Balance Section - FIRST -->
+                    <div class="tuition-section">
+                        <div class="card balance-card">
+                            <div class="card-header">
+                                <h3>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                    </svg>
+                                    Account Balance
+                                </h3>
+                                <button class="btn btn-sm btn-outline" onclick="navigateTo('ledger')">
+                                    <i class="fas fa-history"></i> History
+                                </button>
+                            </div>
+                            <div class="card-content">
+                                <div class="balance-display">
+                                    <div class="balance-label">Current Balance Due</div>
+                                    <div class="balance-amount">₱7,079.70</div>
+                                    <p class="balance-due">
+                                        <i class="fas fa-calendar-alt"></i> 
+                                        Payment deadline: <strong>January 31, 2025</strong>
+                                    </p>
+                                </div>
+                                <div class="payment-info-box">
+                                    <div class="info-row">
+                                        <span>Total Assessed:</span>
+                                        <strong>₱7,079.70</strong>
+                                    </div>
+                                    <div class="info-row">
+                                        <span>Amount Paid:</span>
+                                        <strong class="text-success">₱0.00</strong>
+                                    </div>
+                                    <div class="info-divider"></div>
+                                    <div class="info-row highlight">
+                                        <span>Balance Remaining:</span>
+                                        <strong>₱7,079.70</strong>
+                                    </div>
+                                </div>
+                                <div class="alert-box alert-warning">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                    </svg>
+                                    <div>
+                                        <strong>Action Required:</strong> Clear your balance before enrollment.
+                                    </div>
+                                </div>
+                                <div class="button-group">
+                                    <button class="btn btn-primary btn-block" onclick="navigateTo('ledger')">
+                                        <i class="fas fa-credit-card"></i> Make Payment
+                                    </button>
+                                    <button class="btn btn-outline btn-block" onclick="navigateTo('ledger')">
+                                        <i class="fas fa-file-invoice"></i> View Statement
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Announcements Section - SECOND -->
                     <div class="announcements-section">
                         <div class="card">
                             <div class="card-header">
@@ -246,267 +296,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="tuition-section">
-                        <div class="card balance-card">
-                            <div class="card-header">
-                                <h3>
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                                    </svg>
-                                    Account Balance
-                                </h3>
-                                <button class="btn btn-sm btn-outline" onclick="navigateTo('ledger')">
-                                    <i class="fas fa-history"></i> History
-                                </button>
-                            </div>
-                            <div class="card-content">
-                                <div class="balance-display">
-                                    <div class="balance-label">Current Balance Due</div>
-                                    <div class="balance-amount">₱15,000.00</div>
-                                    <p class="balance-due">
-                                        <i class="fas fa-calendar-alt"></i> 
-                                        Payment deadline: <strong>January 15, 2025</strong>
-                                    </p>
-                                </div>
-                                <div class="payment-info-box">
-                                    <div class="info-row">
-                                        <span>Total Assessed:</span>
-                                        <strong>₱7,079.70</strong>
-                                    </div>
-                                    <div class="info-row">
-                                        <span>Amount Paid:</span>
-                                        <strong class="text-success">₱0.00</strong>
-                                    </div>
-                                    <div class="info-divider"></div>
-                                    <div class="info-row highlight">
-                                        <span>Balance Remaining:</span>
-                                        <strong>₱7,079.70</strong>
-                                    </div>
-                                </div>
-                                <div class="alert-box alert-warning">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                                        <line x1="12" y1="9" x2="12" y2="13"></line>
-                                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                                    </svg>
-                                    <div>
-                                        <strong>Action Required:</strong> Clear your balance before enrollment.
-                                    </div>
-                                </div>
-                                <div class="button-group">
-                                    <button class="btn btn-primary btn-block" onclick="navigateTo('ledger')">
-                                        <i class="fas fa-credit-card"></i> Make Payment
-                                    </button>
-                                    <button class="btn btn-outline btn-block" onclick="navigateTo('ledger')">
-                                        <i class="fas fa-file-invoice"></i> View Statement
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Dashboard Widgets - Redesigned -->
-                <div class="dashboard-widgets">
-                    <div class="widgets-container">
-                        <!-- Academic Overview Widget -->
-                        <div class="widget-card">
-                            <div class="widget-card-header">
-                                <h3>Academic Overview</h3>
-                            </div>
-                            <div class="widget-card-body">
-                                <div class="widget-content">
-                                    <div class="gpa-display">
-                                        <div class="gpa-main">
-                                            <div class="gpa-value" id="gpaValue">1.47</div>
-                                            <div class="gpa-label">Current Semester GWA</div>
-                                            <p class="gpa-scale-note">1.00 = Highest • 5.00 = Fail</p>
-                                        </div>
-                                        <div class="units-display">
-                                            <div class="units-label">Enrolled Units</div>
-                                            <div class="units-value-small">29</div>
-                                        </div>
-                                    </div>
-                                    <div class="gpa-sparkline" id="gpaSparkline" aria-hidden="true"></div>
-                                </div>
-                                <div class="widget-actions">
-                                    <button class="btn btn-primary btn-sm" onclick="navigateTo('grades')">View Grades</button>
-                                    <button class="btn btn-secondary btn-sm" onclick="navigateTo('enrollment')">My Courses</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- To-Do Widget -->
-                        <div class="widget-card">
-                            <div class="widget-card-header">
-                                <h3>To-do / Deadlines</h3>
-                            </div>
-                            <div class="widget-card-body">
-                                <div class="widget-content">
-                                    <ul id="todoList" class="todo-list">
-                                        <!-- populated by JS -->
-                                    </ul>
-                                </div>
-                                <div class="widget-actions">
-                                    <input id="todoInput" type="text" placeholder="Add a task..." class="todo-input">
-                                    <button class="btn btn-primary btn-sm" onclick="addTodo()">Add</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Quick Links Widget -->
-                        <div class="widget-card">
-                            <div class="widget-card-header">
-                                <h3>Quick Links</h3>
-                            </div>
-                            <div class="widget-card-body">
-                                <div class="widget-content">
-                                    <div class="quicklinks-buttons">
-                                        <button class="btn btn-secondary btn-sm btn-block" onclick="navigateTo('enrollment')">
-                                            <i class="fas fa-user-graduate"></i> Enroll
-                                        </button>
-                                        <button class="btn btn-secondary btn-sm btn-block" onclick="navigateTo('ledger')">
-                                            <i class="fas fa-money-bill-wave"></i> Pay Tuition
-                                        </button>
-                                        <button class="btn btn-secondary btn-sm btn-block" onclick="navigateTo('schedule')">
-                                            <i class="fas fa-calendar"></i> My Schedule
-                                        </button>
-                                        <button class="btn btn-secondary btn-sm btn-block" onclick="navigateTo('notifications')">
-                                            <i class="fas fa-bell"></i> Notifications
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Career Widget -->
-                        <div class="widget-card">
-                            <div class="widget-card-header">
-                                <h3>Career & Opportunities</h3>
-                            </div>
-                            <div class="widget-card-body">
-                                <div class="widget-content">
-                                    <ul class="widget-list">
-                                        <li><strong>Company Visit:</strong> TechFirm — Oct 20, 2025</li>
-                                        <li><strong>Internship Fair:</strong> Industry Park — Nov 3, 2025</li>
-                                    </ul>
-                                </div>
-                                <div class="widget-actions">
-                                    <button class="btn btn-primary btn-sm btn-block" onclick="navigateTo('career')">See Openings</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Events Widget -->
-                        <div class="widget-card">
-                            <div class="widget-card-header">
-                                <h3>Upcoming Events</h3>
-                            </div>
-                            <div class="widget-card-body">
-                                <div class="widget-content">
-                                    <ul class="widget-list">
-                                        <li>Orientation Week — Jan 10-14, 2026</li>
-                                        <li>Career Talk: Web Dev — Oct 25, 2025</li>
-                                    </ul>
-                                </div>
-                                <div class="widget-actions">
-                                    <button class="btn btn-secondary btn-sm btn-block" onclick="navigateTo('schedule')">View Calendar</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Messages Widget -->
-                        <div class="widget-card">
-                            <div class="widget-card-header">
-                                <h3>Recent Messages</h3>
-                            </div>
-                            <div class="widget-card-body">
-                                <div class="widget-content">
-                                    <ul id="messagesList" class="messages-list">
-                                        <!-- populated by JS -->
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grades-section">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-                                    <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
-                                </svg>
-                                Recent Grades - 2nd Semester 2024-2025
-                            </h3>
-                            <button class="btn btn-sm btn-outline" onclick="navigateTo('grades')">View All Grades</button>
-                        </div>
-                        <div class="card-content">
-                            <div class="grade-scale-mini">
-                                <span><strong>Grade Scale:</strong> 1.00 (Highest) • 1.25 • 1.50 • 1.75 • 2.00 • 2.25 • 2.50 • 2.75 • 3.00 (Passing) • 5.00 (Fail)</span>
-                            </div>
-                            <div class="grades-list">
-                                <div class="grade-item">
-                                    <div class="grade-info">
-                                        <div class="grade-course">
-                                            <strong>Integrative Programming and Technologies 2</strong>
-                                        </div>
-                                        <p class="grade-details">OLIPT2 • 4 units • Prelim: 1.25, Midterm: 1.50, Finals: 1.00</p>
-                                    </div>
-                                    <span class="badge badge-pass">1.25</span>
-                                </div>
-                                <div class="grade-item">
-                                    <div class="grade-info">
-                                        <div class="grade-course">
-                                            <strong>System Administration and Maintenance</strong>
-                                        </div>
-                                        <p class="grade-details">OLSA01 • 4 units • Prelim: 1.50, Midterm: 1.25, Finals: 1.50</p>
-                                    </div>
-                                    <span class="badge badge-pass">1.50</span>
-                                </div>
-                                <div class="grade-item">
-                                    <div class="grade-info">
-                                        <div class="grade-course">
-                                            <strong>Practicum (243 Hours)</strong>
-                                        </div>
-                                        <p class="grade-details">OLITPRAC1 • 3 units • Prelim: 1.75, Midterm: 1.50, Finals: 1.75</p>
-                                    </div>
-                                    <span class="badge badge-pass">1.75</span>
-                                </div>
-                                <div class="grade-item">
-                                    <div class="grade-info">
-                                        <div class="grade-course">
-                                            <strong>Applications Development and Emerging Technologies</strong>
-                                        </div>
-                                        <p class="grade-details">OLCC06 • 4 units • Prelim: 1.25, Midterm: 1.25, Finals: 1.25</p>
-                                    </div>
-                                    <span class="badge badge-pass">1.25</span>
-                                </div>
-                                <div class="grade-item">
-                                    <div class="grade-info">
-                                        <div class="grade-course">
-                                            <strong>Event Driven Programming</strong>
-                                        </div>
-                                        <p class="grade-details">OLPFI1 • 4 units • Prelim: 1.75, Midterm: 1.75, Finals: 1.75</p>
-                                    </div>
-                                    <span class="badge badge-pass">1.75</span>
-                                </div>
-                            </div>
-                            <div class="grades-summary">
-                                <div class="summary-item">
-                                    <span class="summary-label">Semester GWA:</span>
-                                    <span class="summary-value grade-excellent">1.47</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="summary-label">Total Credits:</span>
-                                    <span class="summary-value">29 units</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -517,31 +306,43 @@
                         <h2>Academic Grades</h2>
                         <p class="text-muted">View your grades and academic performance</p>
                     </div>
-                    <select class="form-select" id="semesterSelect">
-                        <option value="2024-2">2nd Semester, AY 2024-2025 (Current)</option>
-                        <option value="2024-1">1st Semester, AY 2024-2025</option>
-                        <option value="2023-2">2nd Semester, AY 2023-2024</option>
-                    </select>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <select class="form-select" id="yearLevelSelect" onchange="updateGradesByYear()">
+                            <option value="all">All Years</option>
+                            <option value="1">1st Year</option>
+                            <option value="2">2nd Year</option>
+                            <option value="3" selected>3rd Year (Current)</option>
+                            <option value="4">4th Year</option>
+                        </select>
+                        <select class="form-select" id="semesterSelect" onchange="updateGradesBySemester()">
+                            <option value="2024-2">2nd Semester, AY 2024-2025 (Current)</option>
+                            <option value="2024-1">1st Semester, AY 2024-2025</option>
+                            <option value="2023-2">2nd Semester, AY 2023-2024</option>
+                            <option value="2023-1">1st Semester, AY 2023-2024</option>
+                            <option value="2022-2">2nd Semester, AY 2022-2023</option>
+                            <option value="2022-1">1st Semester, AY 2022-2023</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="stats-grid stats-grid-2">
                     <div class="stat-card">
                         <i class="fas fa-chart-line stat-icon" style="color: #4ade80;"></i>
-                        <div class="stat-value">1.47</div>
-                        <div class="stat-label">Semester GWA</div>
+                        <div class="stat-value" id="semesterGWA">1.47</div>
+                        <div class="stat-label" id="gwaLabel">Semester GWA</div>
                         <p class="stat-subtitle">1.00 = Highest, 5.00 = Fail</p>
                     </div>
                     <div class="stat-card">
                         <i class="fas fa-award stat-icon" style="color: #4361ee;"></i>
-                        <div class="stat-value">29</div>
-                        <div class="stat-label">Credits This Semester</div>
+                        <div class="stat-value" id="creditsValue">29</div>
+                        <div class="stat-label" id="creditsLabel">Credits This Semester</div>
                         <p class="stat-subtitle">Total units enrolled</p>
                     </div>
                 </div>
 
                 <div class="card">
                     <div class="card-header">
-                        <h3>Course Grades - 2nd Semester, AY 2024-2025</h3>
+                        <h3 id="gradeTableTitle">Course Grades - 2nd Semester, AY 2024-2025</h3>
                         <div class="grade-scale-info">
                             <button class="btn btn-sm btn-outline" onclick="toggleGradeScale()">
                                 <i class="fas fa-info-circle"></i> Grade Scale
@@ -580,7 +381,7 @@
                                     <th>Status</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="gradesTableBody">
                                 <tr>
                                     <td><span class="badge badge-outline">OLIPT2</span></td>
                                     <td>Integrative Programming and Technologies 2</td>
@@ -678,166 +479,60 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-                </div>
-
-                <!-- Visual Grade Analyzer -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                            </svg>
-                            Visual Grade Analyzer
-                        </h3>
-                    </div>
-                    <div class="card-content">
-                        <!-- Performance Trend Chart -->
-                        <div class="analyzer-section">
-                            <h4>Performance Trends Over Time</h4>
-                            <div class="chart-container">
-                                <canvas id="gradesTrendChart"></canvas>
-                            </div>
-                            <div class="chart-legend">
-                                <div class="legend-item">
-                                    <span class="legend-dot" style="background: #06b6d4;"></span>
-                                    <span>Semester GWA</span>
-                                </div>
-                                <div class="legend-item">
-                                    <span class="legend-dot" style="background: #10b981;"></span>
-                                    <span>Target Goal (1.50)</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Course Performance Breakdown -->
-                        <div class="analyzer-section">
-                            <h4>Course Performance Distribution</h4>
-                            <div class="performance-bars">
-                                <div class="performance-item">
-                                    <div class="performance-label">
-                                        <span>Excellent (1.00-1.49)</span>
-                                        <span class="performance-value">3 courses</span>
-                                    </div>
-                                    <div class="performance-bar">
-                                        <div class="performance-fill" style="width: 37.5%; background: #10b981;"></div>
-                                    </div>
-                                </div>
-                                <div class="performance-item">
-                                    <div class="performance-label">
-                                        <span>Very Good (1.50-1.99)</span>
-                                        <span class="performance-value">5 courses</span>
-                                    </div>
-                                    <div class="performance-bar">
-                                        <div class="performance-fill" style="width: 62.5%; background: #06b6d4;"></div>
-                                    </div>
-                                </div>
-                                <div class="performance-item">
-                                    <div class="performance-label">
-                                        <span>Good (2.00-2.49)</span>
-                                        <span class="performance-value">0 courses</span>
-                                    </div>
-                                    <div class="performance-bar">
-                                        <div class="performance-fill" style="width: 0%; background: #f59e0b;"></div>
-                                    </div>
-                                </div>
-                                <div class="performance-item">
-                                    <div class="performance-label">
-                                        <span>Fair (2.50-2.99)</span>
-                                        <span class="performance-value">0 courses</span>
-                                    </div>
-                                    <div class="performance-bar">
-                                        <div class="performance-fill" style="width: 0%; background: #f97316;"></div>
-                                    </div>
-                                </div>
-                                <div class="performance-item">
-                                    <div class="performance-label">
-                                        <span>Passing (3.00)</span>
-                                        <span class="performance-value">0 courses</span>
-                                    </div>
-                                    <div class="performance-bar">
-                                        <div class="performance-fill" style="width: 0%; background: #84cc16;"></div>
-                                    </div>
-                                </div>
-                                <div class="performance-item">
-                                    <div class="performance-label">
-                                        <span>Failed (5.00)</span>
-                                        <span class="performance-value">0 courses</span>
-                                    </div>
-                                    <div class="performance-bar">
-                                        <div class="performance-fill" style="width: 0%; background: #ef4444;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- What-If Scenario Simulator -->
-                        <div class="analyzer-section what-if-simulator">
-                            <h4>What-If Scenario Simulator</h4>
-                            <p class="section-description">Predict how your next grades will affect your final GWA. Enter expected grades using the Philippine scale (1.00-5.00).</p>
-                            
-                            <div class="simulator-inputs">
-                                <div class="form-group">
-                                    <label for="nextCourse">Next Course/Assessment</label>
-                                    <select id="nextCourse" class="form-control">
-                                        <option value="">Select course...</option>
-                                        <option value="quiz">Upcoming Quiz</option>
-                                        <option value="exam">Final Examination</option>
-                                        <option value="project">Major Project</option>
-                                        <option value="next-sem">Next Semester (Full)</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="predictedGrade">Predicted Grade (1.00-5.00) <i class="fas fa-info-circle" title="1.00 = Highest, 5.00 = Fail"></i></label>
-                                    <select id="predictedGrade" class="form-control">
-                                        <option value="">Select grade...</option>
-                                        <option value="1.00">1.00 (Excellent)</option>
-                                        <option value="1.25">1.25 (Excellent)</option>
-                                        <option value="1.50">1.50 (Very Good)</option>
-                                        <option value="1.75">1.75 (Very Good)</option>
-                                        <option value="2.00">2.00 (Good)</option>
-                                        <option value="2.25">2.25 (Good)</option>
-                                        <option value="2.50">2.50 (Fair)</option>
-                                        <option value="2.75">2.75 (Fair)</option>
-                                        <option value="3.00">3.00 (Passing)</option>
-                                        <option value="5.00">5.00 (Fail)</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="courseWeight">Weight/Credits</label>
-                                    <input type="number" id="courseWeight" class="form-control" placeholder="Credits or % weight" step="1" min="1" max="6" value="3">
-                                </div>
-                                <button class="btn btn-primary" onclick="calculateWhatIf()">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <polyline points="12 6 12 12 16 14"></polyline>
-                                    </svg>
-                                    Calculate Impact
-                                </button>
-                            </div>
-
-                            <div id="whatIfResult" class="what-if-result" style="display: none;">
-                                <div class="result-card">
-                                    <div class="result-icon">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                                        </svg>
-                                    </div>
-                                    <div class="result-content">
-                                        <h5>Projected GWA</h5>
-                                        <div class="projected-gwa">
-                                            <span class="current-gwa">1.47</span>
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                                <polyline points="12 5 19 12 12 19"></polyline>
-                                            </svg>
-                                            <span class="new-gwa" id="projectedGWA">1.45</span>
-                                        </div>
-                                        <p class="result-message" id="resultMessage">Your GWA projection based on expected performance.</p>
-                                    </div>
-                                </div>
-                            </div>
+                        
+                        <!-- Grade Verification Requests Section -->
+                        <div class="grade-verification-requests" style="margin-top:2rem; padding-top:2rem; border-top:1px solid var(--border-color);">
+                            <h4 style="margin-bottom:1rem;">
+                                <i class="fas fa-question-circle"></i>
+                                Grade Verification Requests
+                            </h4>
+                            <p class="text-muted" style="margin-bottom:1rem; font-size:0.9rem;">
+                                You may request verification for grades that are not yet verified. Requests are due within <strong>10 days</strong> of posting.
+                            </p>
+                            <table style="width:100%; border-collapse:collapse;">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:left; padding:0.75rem; border-bottom:2px solid var(--border-color);">Course</th>
+                                        <th style="text-align:left; padding:0.75rem; border-bottom:2px solid var(--border-color);">Current Status</th>
+                                        <th style="text-align:center; padding:0.75rem; border-bottom:2px solid var(--border-color);">Request Verification</th>
+                                        <th style="text-align:center; padding:0.75rem; border-bottom:2px solid var(--border-color);">Due</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding:0.75rem; border-bottom:1px solid var(--border-color);">
+                                            <strong>OLITPRAC1</strong> - Practicum (243 Hours)
+                                        </td>
+                                        <td style="padding:0.75rem; border-bottom:1px solid var(--border-color);">
+                                            <span class="badge badge-warning"><i class="fas fa-clock"></i> Under Verification</span>
+                                        </td>
+                                        <td style="text-align:center; padding:0.75rem; border-bottom:1px solid var(--border-color);">
+                                            <button class="btn btn-sm btn-primary" onclick="requestGradeVerification('OLITPRAC1', 'Practicum (243 Hours)')">
+                                                <i class="fas fa-paper-plane"></i> Request Verification
+                                            </button>
+                                        </td>
+                                        <td style="text-align:center; padding:0.75rem; border-bottom:1px solid var(--border-color);">
+                                            <span class="badge badge-danger">Due in 10 days</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:0.75rem; border-bottom:1px solid var(--border-color);">
+                                            <strong>OLCAPS2</strong> - Capstone Project and Research 2
+                                        </td>
+                                        <td style="padding:0.75rem; border-bottom:1px solid var(--border-color);">
+                                            <span class="badge badge-info"><i class="fas fa-info-circle"></i> Pending</span>
+                                        </td>
+                                        <td style="text-align:center; padding:0.75rem; border-bottom:1px solid var(--border-color);">
+                                            <button class="btn btn-sm btn-primary" onclick="requestGradeVerification('OLCAPS2', 'Capstone Project and Research 2')">
+                                                <i class="fas fa-paper-plane"></i> Request Verification
+                                            </button>
+                                        </td>
+                                        <td style="text-align:center; padding:0.75rem; border-bottom:1px solid var(--border-color);">
+                                            <span class="badge badge-danger">Due in 10 days</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -1168,75 +863,139 @@
                     </div>
                 </div>
 
-                <!-- Schedule Filters -->
-                <div class="card">
-                    <div class="schedule-filters">
-                        <div class="filter-group">
-                            <label><i class="fas fa-filter"></i> Day:</label>
-                            <select id="dayFilter" class="form-select form-select-sm" onchange="filterSchedule()">
-                                <option value="all">All Days</option>
-                                <option value="monday">Monday</option>
-                                <option value="tuesday">Tuesday</option>
-                                <option value="wednesday">Wednesday</option>
-                                <option value="thursday">Thursday</option>
-                                <option value="friday">Friday</option>
-                                <option value="saturday">Saturday</option>
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <label>Type:</label>
-                            <select id="typeFilter" class="form-select form-select-sm" onchange="filterSchedule()">
-                                <option value="all">All Types</option>
-                                <option value="lecture">Lecture</option>
-                                <option value="lab">Laboratory</option>
-                                <option value="online">Online</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Weekly Calendar View -->
-                <div class="schedule-calendar-view">
-                    <div class="calendar-week-header">
-                        <div class="calendar-day">
-                            <div class="day-name">MON</div>
-                            <div class="day-date">Oct 7</div>
-                        </div>
-                        <div class="calendar-day">
-                            <div class="day-name">TUE</div>
-                            <div class="day-date">Oct 8</div>
-                        </div>
-                        <div class="calendar-day today">
-                            <div class="day-name">WED</div>
-                            <div class="day-date">Oct 9</div>
-                            <span class="today-badge">Today</span>
-                        </div>
-                        <div class="calendar-day">
-                            <div class="day-name">THU</div>
-                            <div class="day-date">Oct 10</div>
-                        </div>
-                        <div class="calendar-day">
-                            <div class="day-name">FRI</div>
-                            <div class="day-date">Oct 11</div>
-                        </div>
-                        <div class="calendar-day">
-                            <div class="day-name">SAT</div>
-                            <div class="day-date">Oct 12</div>
-                        </div>
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button class="btn btn-sm btn-outline" onclick="previousWeek()">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <h3 id="currentWeek">October 14-20, 2025</h3>
+                        <button class="btn btn-sm btn-outline" onclick="nextWeek()">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
                     </div>
-                </div>
-
-                <!-- Schedule List View -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3>
-                            <i class="fas fa-calendar-alt"></i>
-                            This Week's Classes
-                        </h3>
-                        <span class="badge badge-primary">8 Classes</span>
-                    </div>
-                    <div id="scheduleContent">
-                        <!-- Will be populated by JavaScript -->
+                    
+                    <div class="calendar-grid">
+                        <div class="calendar-time-col">
+                            <div class="time-header">Time</div>
+                            <div class="time-slot">7:00 AM</div>
+                            <div class="time-slot">8:00 AM</div>
+                            <div class="time-slot">9:00 AM</div>
+                            <div class="time-slot">10:00 AM</div>
+                            <div class="time-slot">11:00 AM</div>
+                            <div class="time-slot">12:00 PM</div>
+                            <div class="time-slot">1:00 PM</div>
+                            <div class="time-slot">2:00 PM</div>
+                            <div class="time-slot">3:00 PM</div>
+                            <div class="time-slot">4:00 PM</div>
+                            <div class="time-slot">5:00 PM</div>
+                            <div class="time-slot">6:00 PM</div>
+                        </div>
+                        
+                        <div class="calendar-day-col">
+                            <div class="day-header">
+                                <div class="day-name">MON</div>
+                                <div class="day-date">Oct 14</div>
+                            </div>
+                            <div class="day-slots">
+                                <div class="calendar-class" style="grid-row: 2 / 4; background: rgba(59, 130, 246, 0.1); border-left: 3px solid #3b82f6;">
+                                    <div class="class-title">System Admin</div>
+                                    <div class="class-time">7:30-9:30 AM</div>
+                                    <div class="class-room">Room 301</div>
+                                </div>
+                                <div class="calendar-class" style="grid-row: 5 / 7; background: rgba(16, 185, 129, 0.1); border-left: 3px solid #10b981;">
+                                    <div class="class-title">Info Assurance</div>
+                                    <div class="class-time">10:00-12:00 PM</div>
+                                    <div class="class-room">Lab 2</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="calendar-day-col">
+                            <div class="day-header">
+                                <div class="day-name">TUE</div>
+                                <div class="day-date">Oct 15</div>
+                            </div>
+                            <div class="day-slots">
+                                <div class="calendar-class" style="grid-row: 3 / 5; background: rgba(245, 158, 11, 0.1); border-left: 3px solid #f59e0b;">
+                                    <div class="class-title">App Development</div>
+                                    <div class="class-time">8:00-10:00 AM</div>
+                                    <div class="class-room">Lab 1</div>
+                                </div>
+                                <div class="calendar-class" style="grid-row: 8 / 10; background: rgba(139, 92, 246, 0.1); border-left: 3px solid #8b5cf6;">
+                                    <div class="class-title">Event Programming</div>
+                                    <div class="class-time">1:00-3:00 PM</div>
+                                    <div class="class-room">Room 205</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="calendar-day-col today">
+                            <div class="day-header">
+                                <div class="day-name">WED</div>
+                                <div class="day-date">Oct 16</div>
+                                <span class="today-badge">Today</span>
+                            </div>
+                            <div class="day-slots">
+                                <div class="calendar-class" style="grid-row: 2 / 4; background: rgba(236, 72, 153, 0.1); border-left: 3px solid #ec4899;">
+                                    <div class="class-title">Capstone Project 2</div>
+                                    <div class="class-time">7:30-9:30 AM</div>
+                                    <div class="class-room">Room 402</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="calendar-day-col">
+                            <div class="day-header">
+                                <div class="day-name">THU</div>
+                                <div class="day-date">Oct 17</div>
+                            </div>
+                            <div class="day-slots">
+                                <div class="calendar-class" style="grid-row: 3 / 5; background: rgba(59, 130, 246, 0.1); border-left: 3px solid #3b82f6;">
+                                    <div class="class-title">System Admin</div>
+                                    <div class="class-time">8:00-10:00 AM</div>
+                                    <div class="class-room">Lab 2</div>
+                                </div>
+                                <div class="calendar-class" style="grid-row: 6 / 8; background: rgba(16, 185, 129, 0.1); border-left: 3px solid #10b981;">
+                                    <div class="class-title">Practicum</div>
+                                    <div class="class-time">11:00 AM-1:00 PM</div>
+                                    <div class="class-room">Industry</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="calendar-day-col">
+                            <div class="day-header">
+                                <div class="day-name">FRI</div>
+                                <div class="day-date">Oct 18</div>
+                            </div>
+                            <div class="day-slots">
+                                <div class="calendar-class" style="grid-row: 4 / 6; background: rgba(245, 158, 11, 0.1); border-left: 3px solid #f59e0b;">
+                                    <div class="class-title">App Development</div>
+                                    <div class="class-time">9:00-11:00 AM</div>
+                                    <div class="class-room">Online</div>
+                                </div>
+                                <div class="calendar-class" style="grid-row: 8 / 10; background: rgba(239, 68, 68, 0.1); border-left: 3px solid #ef4444;">
+                                    <div class="class-title">Elective</div>
+                                    <div class="class-time">1:00-3:00 PM</div>
+                                    <div class="class-room">Room 101</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="calendar-day-col">
+                            <div class="day-header">
+                                <div class="day-name">SAT</div>
+                                <div class="day-date">Oct 19</div>
+                            </div>
+                            <div class="day-slots">
+                                <div class="calendar-class" style="grid-row: 3 / 6; background: rgba(236, 72, 153, 0.1); border-left: 3px solid #ec4899;">
+                                    <div class="class-title">Capstone Consultation</div>
+                                    <div class="class-time">8:00-11:00 AM</div>
+                                    <div class="class-room">Room 402</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -1338,8 +1097,28 @@
                     </select>
                 </div>
 
-                <div class="courses-grid" id="enrollmentCourses">
-                    <!-- Will be populated by JavaScript -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Available Courses</h3>
+                    </div>
+                    <div class="table-container">
+                        <table id="enrollmentCourses">
+                            <thead>
+                                <tr>
+                                    <th>Course Code</th>
+                                    <th>Course Name</th>
+                                    <th style="text-align: center;">Credits</th>
+                                    <th>Instructor</th>
+                                    <th>Schedule</th>
+                                    <th style="text-align: center;">Slots</th>
+                                    <th style="text-align: center;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -2054,499 +1833,14 @@
                     <div class="card">
                         <div class="card-header">
                             <h3>Online Payment</h3>
-                            <p class="text-muted">Select items to add to your payment</p>
+                            <p class="text-muted">Select a category, then add items to your cart</p>
                         </div>
-                        <div class="payment-items-grid">
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-file-alt"></i>
-                                    <span>Affidavit of Loss</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Affidavit of Loss', 200)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-                            
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-file-invoice-dollar"></i>
-                                    <span>Assessment Fee</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Assessment Fee', 100)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-graduation-cap"></i>
-                                    <span>Assessment Fee - Scholarship</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Assessment Fee - Scholarship', 100)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-tshirt"></i>
-                                    <span>CCS/COEDT Uniform Vest</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('CCS/COEDT Uniform Vest', 450)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-certificate"></i>
-                                    <span>Certificate of Enrollment</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Certificate of Enrollment', 50)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-award"></i>
-                                    <span>Certificate of GM</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Certificate of GM', 100)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-user-graduate"></i>
-                                    <span>Certificate of Graduation</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Certificate of Graduation', 150)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-file-signature"></i>
-                                    <span>Certification Fee - CWA</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Certification Fee - CWA', 100)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-clipboard-list"></i>
-                                    <span>Certification of Grades</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Certification of Grades', 50)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-book"></i>
-                                    <span>Completion (1) one Incomplete Grade</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Completion (1) one Incomplete Grade', 500)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-book"></i>
-                                    <span>Completion (2) two Incomplete Grades</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Completion (2) two Incomplete Grades', 1000)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-book"></i>
-                                    <span>Completion (3) three Incomplete Grades</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Completion (3) three Incomplete Grades', 1500)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-book"></i>
-                                    <span>Completion (4) four Incomplete Grades</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Completion (4) four Incomplete Grades', 2000)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-book"></i>
-                                    <span>Completion (5) five Incomplete Grades</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Completion (5) five Incomplete Grades', 2500)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-book"></i>
-                                    <span>Completion (6) six Incomplete Grades</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Completion (6) six Incomplete Grades', 3000)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-book"></i>
-                                    <span>Completion (7) seven Incomplete Grades</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Completion (7) seven Incomplete Grades', 3500)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-id-card"></i>
-                                    <span>Damaged School ID</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Damaged School ID', 150)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-scroll"></i>
-                                    <span>Diploma</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Diploma', 300)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-stamp"></i>
-                                    <span>Documentary Stamp</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Documentary Stamp', 30)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-ban"></i>
-                                    <span>Dropped one (1) subject</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Dropped one (1) subject', 200)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-ban"></i>
-                                    <span>Dropped two (2) subjects</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Dropped two (2) subjects', 400)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-ban"></i>
-                                    <span>Dropped three (3) subjects</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Dropped three (3) subjects', 600)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-ban"></i>
-                                    <span>Dropped four (4) subjects</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Dropped four (4) subjects', 800)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-ban"></i>
-                                    <span>Dropped five (5) subjects</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Dropped five (5) subjects', 1000)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-ban"></i>
-                                    <span>Dropped six (6) subjects</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Dropped six (6) subjects', 1200)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-ban"></i>
-                                    <span>Dropped seven (7) subjects</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Dropped seven (7) subjects', 1400)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-seal"></i>
-                                    <span>Dry Seal</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Dry Seal', 50)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-user-graduate"></i>
-                                    <span>Graduation Fee</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Graduation Fee', 1500)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-file-contract"></i>
-                                    <span>Honorable Dismissal</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Honorable Dismissal', 200)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-envelope"></i>
-                                    <span>ICCT Document Envelope</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('ICCT Document Envelope', 50)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-ribbon"></i>
-                                    <span>ID Lace</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('ID Lace', 30)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-clock"></i>
-                                    <span>Late Enrolees Fee</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Late Enrolees Fee', 500)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                    <span>Library Penalty</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Library Penalty', 100)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-book-reader"></i>
-                                    <span>Lost Library ID</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Lost Library ID', 150)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-id-card-alt"></i>
-                                    <span>Lost School ID</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Lost School ID', 200)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-tshirt"></i>
-                                    <span>NSTP Uniform (new design)</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('NSTP Uniform (new design)', 500)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-cog"></i>
-                                    <span>Processing Fee</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Processing Fee', 200)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-times-circle"></i>
-                                    <span>Processing Fee - Cancellation</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Processing Fee - Cancellation', 200)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-file-export"></i>
-                                    <span>Processing Fee - Pullout</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Processing Fee - Pullout', 200)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-exchange-alt"></i>
-                                    <span>Processing Fee - Transfer</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Processing Fee - Transfer', 200)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-sign-out-alt"></i>
-                                    <span>Processing Fee - Withdrawal</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Processing Fee - Withdrawal', 200)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-id-badge"></i>
-                                    <span>School ID</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('School ID', 200)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-sync-alt"></i>
-                                    <span>Shifting Fee</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Shifting Fee', 500)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-list-ol"></i>
-                                    <span>Summary of Grades</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Summary of Grades', 100)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-file-alt"></i>
-                                    <span>Transcript of Records - BACHELOR Course</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Transcript of Records - BACHELOR Course', 250)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-tshirt"></i>
-                                    <span>Uniform Coastal Male</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Uniform Coastal Male', 600)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-tshirt"></i>
-                                    <span>Uniform Jogger Pants</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Uniform Jogger Pants', 400)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-running"></i>
-                                    <span>Uniform PE</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Uniform PE', 350)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-item-info">
-                                    <i class="fas fa-tshirt"></i>
-                                    <span>Uniform Plt</span>
-                                </div>
-                                <button class="btn btn-sm btn-outline" onclick="addToCart('Uniform Plt', 450)">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
+                        
+                        <!-- Category-driven store UI (JS will populate items) -->
+                        <div id="categoryItemsContainer" class="card-content">
+                            <!-- category buttons and items rendered by JS -->
                         </div>
+                    </div>
 
                         <!-- Shopping Cart Section -->
                         <div class="cart-container" id="cartContainer" style="display:none;">

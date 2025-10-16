@@ -395,39 +395,24 @@ const availableCourses = [
 function renderEnrollmentCourses() {
   if (!enrollmentCoursesEl) return;
   
-  enrollmentCoursesEl.innerHTML = availableCourses.map(course => `
-    <div class="course-card ${course.enrolled ? 'enrolled' : ''}" data-id="${course.id}">
-      <div class="course-color-bar" style="background: ${course.color};"></div>
-      <div class="course-header">
-        <div>
-          <span class="badge badge-outline">${course.code}</span>
-          <span class="badge badge-secondary">${course.credits} Credits</span>
-        </div>
-        <h3>${course.name}</h3>
-      </div>
-      <div class="course-info">
-        <div class="course-info-item">
-          <i class="fas fa-user"></i>
-          <div>
-            <strong>Instructor</strong>
-            <p>${course.instructor}</p>
-          </div>
-        </div>
-        <div class="course-info-item">
-          <i class="fas fa-clock"></i>
-          <div>
-            <strong>Schedule</strong>
-            <p>${course.schedule}</p>
-          </div>
-        </div>
-      </div>
-      <div class="course-footer">
-        <span><i class="fas fa-users"></i> 25/40 slots</span>
-        <button class="enroll-btn ${course.enrolled ? 'enrolled' : ''}" onclick="toggleEnrollment(${course.id})">
+  const tbody = enrollmentCoursesEl.querySelector('tbody');
+  if (!tbody) return;
+  
+  tbody.innerHTML = availableCourses.map(course => `
+    <tr class="${course.enrolled ? 'enrolled-row' : ''}" data-id="${course.id}">
+      <td><span class="badge badge-outline">${course.code}</span></td>
+      <td><strong>${course.name}</strong></td>
+      <td style="text-align: center;">${course.credits}</td>
+      <td>${course.instructor}</td>
+      <td><i class="fas fa-clock"></i> ${course.schedule}</td>
+      <td style="text-align: center;"><span class="badge badge-secondary"><i class="fas fa-users"></i> 25/40</span></td>
+      <td style="text-align: center;">
+        <button class="btn btn-sm ${course.enrolled ? 'btn-success' : 'btn-primary'}" onclick="toggleEnrollment(${course.id})">
           <i class="fas ${course.enrolled ? 'fa-check' : 'fa-plus'}"></i>
+          ${course.enrolled ? 'Enrolled' : 'Enroll'}
         </button>
-      </div>
-    </div>
+      </td>
+    </tr>
   `).join('');
   
   updateEnrollmentCart();
@@ -699,30 +684,228 @@ const items = [
 
 let cart = [];
 
-function renderStore() {
-  if (!storeItems) return;
+// --- STORE (category-driven) ---
+// storeItems / cartItems / cartContainer are defined earlier
+const storeCatalog = {
+  documents: [
+    { id: 'd1', name: 'Certificate of Enrollment', desc: 'Official certificate of enrollment', price: 50, img: 'https://via.placeholder.com/80x80?text=Cert' },
+    { id: 'd2', name: 'Certificate of Graduation', desc: 'Graduation certificate', price: 150, img: 'https://via.placeholder.com/80x80?text=Grad' },
+    { id: 'd3', name: 'Transcript of Records', desc: 'Official transcript', price: 250, img: 'https://via.placeholder.com/80x80?text=TOR' },
+    { id: 'd4', name: 'Honorable Dismissal', desc: 'Transfer credentials', price: 100, img: 'https://via.placeholder.com/80x80?text=HD' }
+  ],
+  uniforms: [
+    { id: 'u1', name: 'PE Uniform', desc: 'Physical Education uniform', price: 500, img: 'https://via.placeholder.com/80x80?text=Uniform' },
+    { id: 'u2', name: 'College Polo', desc: 'Official college polo', price: 600, img: 'https://via.placeholder.com/80x80?text=Polo' }
+  ],
+  supplies: [
+    { id: 's1', name: 'Notebook', desc: 'ICCT College notebook', price: 80, img: 'https://via.placeholder.com/80x80?text=Notebook' },
+    { id: 's2', name: 'ID Lace', desc: 'ICCT official ID lace', price: 100, img: 'https://via.placeholder.com/80x80?text=Lace' },
+    { id: 's3', name: 'Lab Manual', desc: 'Laboratory manual', price: 300, img: 'https://via.placeholder.com/80x80?text=Manual' }
+  ],
+  fees: [
+    { id: 'f1', name: 'ID Card Replacement', desc: 'New student ID', price: 150, img: 'https://via.placeholder.com/80x80?text=ID' },
+    { id: 'f2', name: 'Clearance Fee', desc: 'End of semester clearance', price: 50, img: 'https://via.placeholder.com/80x80?text=Clear' },
+    { id: 'f3', name: 'Late Enrollment Fee', desc: 'Late enrollment penalty', price: 500, img: 'https://via.placeholder.com/80x80?text=Late' }
+  ]
+};
+
+function renderCategoryButtons() {
+  const container = document.getElementById('categoryItemsContainer') || document.getElementById('storeItems');
+  if (!container) return;
+  const keys = Object.keys(storeCatalog);
   
-  storeItems.innerHTML = items.map(item => `
-    <div class="store-item">
-      <div class="item-info">
-        <img src="${item.img}" alt="${item.name}">
-        <div>
-          <div class="item-name"><strong>${item.name}</strong></div>
-          <div class="item-description">${item.desc}</div>
-        </div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:flex-end">
-        <div class="item-price">₱${item.price}</div>
-        <button class="btn btn-primary btn-sm" onclick="addToCartOld(${item.id})">Add</button>
-      </div>
-    </div>
-  `).join("");
+  // Category icons (outline style)
+  const categoryIcons = {
+    documents: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>`,
+    uniforms: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>`,
+    supplies: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>`,
+    fees: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>`
+  };
+  
+  const html = keys.map(k => `
+    <button class="category-btn" data-cat="${k}" onclick="showCategoryItems('${k}')">
+      ${categoryIcons[k] || ''}
+      <span>${k.charAt(0).toUpperCase() + k.slice(1)}</span>
+    </button>
+  `).join('');
+  container.innerHTML = `<div class="category-selector">${html}</div><div id="categoryItemsDisplay"></div>`;
 }
 
-// Render store on load
-if (storeItems) {
-  renderStore();
+function showCategoryItems(catKey) {
+  // visually mark active - allow reselection
+  document.querySelectorAll('.category-btn').forEach(b => {
+    if (b.dataset.cat === catKey) {
+      // Toggle if already active, otherwise activate
+      if (b.classList.contains('active')) {
+        b.classList.remove('active');
+        // Clear items
+        const display = document.getElementById('categoryItemsDisplay');
+        if (display) display.innerHTML = '';
+        return;
+      } else {
+        // Remove active from all others
+        document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+        b.classList.add('active');
+      }
+    }
+  });
+  renderCategoryItems(catKey);
 }
+
+function renderCategoryItems(catKey) {
+  const list = storeCatalog[catKey] || [];
+  const display = document.getElementById('categoryItemsDisplay');
+  if (!display) return;
+  if (list.length === 0) {
+    display.innerHTML = '<p class="empty-state">No items in this category.</p>';
+    return;
+  }
+  const html = list.map(it => `
+    <div class="store-item-card">
+      <div class="store-item-icon">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <circle cx="8.5" cy="8.5" r="1.5"></circle>
+          <polyline points="21 15 16 10 5 21"></polyline>
+        </svg>
+      </div>
+      <div class="store-item-info">
+        <h4>${it.name}</h4>
+        <p class="text-muted">${it.desc}</p>
+      </div>
+      <div class="store-item-actions">
+        <div class="price">₱${it.price.toFixed(2)}</div>
+        <button class="btn btn-sm btn-primary" onclick="addToCart('${it.name.replace(/'/g, "\\'")}', ${it.price})">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Add
+        </button>
+      </div>
+    </div>
+  `).join('');
+  display.innerHTML = `<div class="category-items">${html}</div>`;
+}
+
+// Initialize store view: show category buttons on load
+if (document.getElementById('categoryItemsContainer') || storeItems) {
+  renderCategoryButtons();
+}
+
+// --- Calendar helpers ---
+function startOfWeek(date) {
+  const d = new Date(date);
+  const day = d.getDay(); // 0 (Sun) - 6 (Sat)
+  const diff = (day === 0 ? -6 : 1 - day); // make Monday the first day
+  d.setDate(d.getDate() + diff);
+  d.setHours(0,0,0,0);
+  return d;
+}
+
+function formatDateRange(a,b) {
+  const opts = { month: 'short', day: 'numeric' };
+  const as = a.toLocaleDateString(undefined, opts);
+  const bs = b.toLocaleDateString(undefined, opts);
+  return `${as} — ${bs}`;
+}
+
+function dayNameToIndex(name) {
+  const map = { monday:0, tuesday:1, wednesday:2, thursday:3, friday:4, saturday:5 };
+  return map[(name||'').toLowerCase()] ?? -1;
+}
+
+function timeToGridRows(timeStr) {
+  // assumes grid rows from 1..12 representing 7:00..18:00 in 1 hour steps
+  try {
+    const parts = timeStr.split('-');
+    const start = parseTime(parts[0]);
+    const end = parseTime(parts[1]);
+    const idxStart = Math.max(1, start.hour - 6); // 7:00 -> row 1
+    const idxEnd = Math.min(13, end.hour - 6 + (end.minute>0?1:0));
+    return { start: idxStart, end: idxEnd };
+  } catch(e){
+    return { start:1, end:2 };
+  }
+}
+
+function parseTime(t) {
+  // t like '7:30 AM' or '13:00' or '9:00 PM'
+  if (!t) return { hour:7, minute:0 };
+  const match = t.trim().match(/(\d{1,2}):(\d{2})\s*(AM|PM)?/i);
+  if (!match) return { hour:7, minute:0 };
+  let h = parseInt(match[1],10);
+  const m = parseInt(match[2],10);
+  const ampm = match[3];
+  if (ampm) {
+    if (ampm.toUpperCase() === 'PM' && h !== 12) h += 12;
+    if (ampm.toUpperCase() === 'AM' && h === 12) h = 0;
+  }
+  return { hour: h, minute: m };
+}
+
+function previousWeek() {
+  const start = window.calendarStart ? new Date(window.calendarStart) : startOfWeek(new Date());
+  start.setDate(start.getDate() - 7);
+  window.calendarStart = start.toISOString();
+  renderCalendar();
+}
+
+function nextWeek() {
+  const start = window.calendarStart ? new Date(window.calendarStart) : startOfWeek(new Date());
+  start.setDate(start.getDate() + 7);
+  window.calendarStart = start.toISOString();
+  renderCalendar();
+}
+
+// Calendar-aware schedule renderer
+function renderCalendar() {
+  const schedule = scheduleData || [];
+  const weekTitle = document.getElementById('currentWeek');
+  const calendarGrid = document.querySelector('.calendar-grid');
+  if (!calendarGrid) return;
+
+  // compute start of week from window.calendarStart (defaults to today start-of-week)
+  const start = window.calendarStart ? new Date(window.calendarStart) : startOfWeek(new Date());
+  const end = new Date(start);
+  end.setDate(start.getDate() + 5); // Mon-Sat (6 days)
+  if (weekTitle) weekTitle.textContent = formatDateRange(start, end);
+
+  // Clear existing day columns' .day-slots
+  const dayCols = document.querySelectorAll('.calendar-day-col');
+  dayCols.forEach((col, idx) => {
+    const slots = col.querySelector('.day-slots');
+    if (slots) slots.innerHTML = '';
+    // determine date for this column
+    const d = new Date(start);
+    d.setDate(start.getDate() + idx);
+    col.dataset.date = d.toISOString();
+  });
+
+  // place schedule items by matching day (mon..sat) and approximate time -> grid-row placement
+  schedule.forEach(item => {
+    // item: { day: 'monday', time: '8:00 AM - 11:00 AM', subject: '...', room: '...' }
+    const dayIndex = dayNameToIndex(item.day);
+    if (dayIndex < 0) return;
+    const col = document.querySelectorAll('.calendar-day-col')[dayIndex];
+    if (!col) return;
+    const slots = col.querySelector('.day-slots');
+    const rowSpan = timeToGridRows(item.time);
+    const el = document.createElement('div');
+    el.className = 'calendar-class';
+    el.style.gridRow = `${rowSpan.start} / ${rowSpan.end}`;
+    el.innerHTML = `
+      <div class="class-title">${item.subject}</div>
+      <div class="class-time">${item.time}</div>
+      <div class="class-room">${item.room || ''}</div>
+    `;
+    // optional color tag
+    if (item.color) el.style.borderLeft = `3px solid ${item.color}`;
+    slots.appendChild(el);
+  });
+}
+
+// Store initialization handled by renderCategoryButtons() earlier
 
 // ----------- ENHANCED CART SYSTEM FOR ONLINE PAYMENT -----------
 function addToCart(itemName, itemPrice) {
@@ -987,19 +1170,17 @@ function initializePortal() {
   renderMessages();
   updateGPA(2.85);
   
-  // Render schedule if on schedule page
-  if (scheduleList) {
-    renderSchedule();
+  // Render schedule if on schedule page (check for calendar or old list)
+  const calendarGrid = document.querySelector('.calendar-grid');
+  if (calendarGrid) {
+    renderCalendar(); // new calendar view
+  } else if (scheduleContent) {
+    renderSchedule(); // fallback to old list view
   }
   
   // Render payment history
   if (paymentHistoryEl) {
     renderPaymentHistory();
-  }
-  
-  // Render store items
-  if (storeItems) {
-    renderStore();
   }
   
   // Render enrollment sections
@@ -1013,7 +1194,7 @@ function initializePortal() {
   }
   
   // Initialize cart display
-  renderCart();
+  renderEnhancedCart();
   
   // Load profile data
   loadProfile();
@@ -1223,6 +1404,300 @@ function toggleGradeScale() {
     if (legend) {
         legend.style.display = legend.style.display === 'none' ? 'block' : 'none';
     }
+}
+
+// ----------- COMPREHENSIVE GRADES DATA BY YEAR -----------
+const allGradesData = {
+    // 1st Year - 2022-2023
+    '2022-1': {
+        year: 1,
+        semester: '1st Semester, AY 2022-2023',
+        gwa: 1.65,
+        credits: 27,
+        courses: [
+            { code: 'OLGE101', name: 'Understanding the Self', credits: 3, prelim: 1.75, midterm: 1.50, finals: 1.75, finalGrade: 1.75, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLGE102', name: 'Mathematics in the Modern World', credits: 3, prelim: 1.75, midterm: 2.00, finals: 1.75, finalGrade: 1.75, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLGE103', name: 'Purposive Communication', credits: 3, prelim: 1.50, midterm: 1.75, finals: 1.50, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCS101', name: 'Introduction to Computing', credits: 3, prelim: 1.50, midterm: 1.50, finals: 1.75, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCS102', name: 'Computer Programming 1', credits: 3, prelim: 1.75, midterm: 1.75, finals: 1.75, finalGrade: 1.75, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLGE104', name: 'Physical Education 1', credits: 2, prelim: 1.50, midterm: 1.50, finals: 1.50, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLGE105', name: 'National Service Training Program 1', credits: 3, prelim: 1.75, midterm: 1.75, finals: 1.50, finalGrade: 1.75, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCS103', name: 'Discrete Structures 1', credits: 3, prelim: 1.75, midterm: 2.00, finals: 1.75, finalGrade: 1.75, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCS104', name: 'Social Issues and Professional Practice', credits: 3, prelim: 1.50, midterm: 1.75, finals: 1.50, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' }
+        ]
+    },
+    '2022-2': {
+        year: 1,
+        semester: '2nd Semester, AY 2022-2023',
+        gwa: 1.58,
+        credits: 30,
+        courses: [
+            { code: 'OLGE106', name: 'Readings in Philippine History', credits: 3, prelim: 1.50, midterm: 1.50, finals: 1.75, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLGE107', name: 'The Contemporary World', credits: 3, prelim: 1.75, midterm: 1.50, finals: 1.75, finalGrade: 1.75, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCS105', name: 'Computer Programming 2', credits: 3, prelim: 1.50, midterm: 1.50, finals: 1.50, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCS106', name: 'Data Structures and Algorithms', credits: 3, prelim: 1.75, midterm: 1.75, finals: 1.50, finalGrade: 1.75, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCS107', name: 'Discrete Structures 2', credits: 3, prelim: 1.50, midterm: 1.75, finals: 1.50, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCS108', name: 'Information Management', credits: 3, prelim: 1.75, midterm: 1.50, finals: 1.75, finalGrade: 1.75, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLGE108', name: 'Physical Education 2', credits: 2, prelim: 1.50, midterm: 1.25, finals: 1.50, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLGE109', name: 'National Service Training Program 2', credits: 3, prelim: 1.50, midterm: 1.50, finals: 1.50, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCS109', name: 'Human Computer Interaction', credits: 3, prelim: 1.50, midterm: 1.75, finals: 1.50, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCS110', name: 'Platform Technologies', credits: 4, prelim: 1.75, midterm: 1.50, finals: 1.75, finalGrade: 1.75, remarks: 'Very Good', status: 'verified' }
+        ]
+    },
+    // 2nd Year - 2023-2024
+    '2023-1': {
+        year: 2,
+        semester: '1st Semester, AY 2023-2024',
+        gwa: 1.52,
+        credits: 28,
+        courses: [
+            { code: 'OLGE110', name: 'Art Appreciation', credits: 3, prelim: 1.50, midterm: 1.50, finals: 1.50, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLGE111', name: 'Science, Technology and Society', credits: 3, prelim: 1.75, midterm: 1.50, finals: 1.75, finalGrade: 1.75, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCS111', name: 'Object Oriented Programming', credits: 3, prelim: 1.50, midterm: 1.50, finals: 1.25, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCS112', name: 'Architecture and Organization', credits: 3, prelim: 1.75, midterm: 1.50, finals: 1.75, finalGrade: 1.75, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCS113', name: 'Networking 1', credits: 3, prelim: 1.50, midterm: 1.50, finals: 1.50, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCS114', name: 'Operating Systems', credits: 3, prelim: 1.50, midterm: 1.25, finals: 1.50, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLGE112', name: 'Physical Education 3', credits: 2, prelim: 1.25, midterm: 1.25, finals: 1.25, finalGrade: 1.25, remarks: 'Excellent', status: 'verified' },
+            { code: 'OLCS115', name: 'Quantitative Methods', credits: 3, prelim: 1.75, midterm: 1.50, finals: 1.75, finalGrade: 1.75, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCS116', name: 'Software Engineering 1', credits: 3, prelim: 1.50, midterm: 1.50, finals: 1.50, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' }
+        ]
+    },
+    '2023-2': {
+        year: 2,
+        semester: '2nd Semester, AY 2023-2024',
+        gwa: 1.48,
+        credits: 29,
+        courses: [
+            { code: 'OLGE113', name: 'Ethics', credits: 3, prelim: 1.50, midterm: 1.50, finals: 1.50, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLGE114', name: 'Rizal: Life and Works', credits: 3, prelim: 1.75, midterm: 1.50, finals: 1.50, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCS117', name: 'Networking 2', credits: 3, prelim: 1.50, midterm: 1.25, finals: 1.50, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCS118', name: 'Information Assurance and Security 1', credits: 3, prelim: 1.25, midterm: 1.50, finals: 1.25, finalGrade: 1.25, remarks: 'Excellent', status: 'verified' },
+            { code: 'OLCS119', name: 'Algorithms and Complexity', credits: 3, prelim: 1.50, midterm: 1.50, finals: 1.75, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCS120', name: 'Programming Languages', credits: 3, prelim: 1.50, midterm: 1.50, finals: 1.50, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLGE115', name: 'Physical Education 4', credits: 2, prelim: 1.25, midterm: 1.25, finals: 1.25, finalGrade: 1.25, remarks: 'Excellent', status: 'verified' },
+            { code: 'OLCS121', name: 'Software Engineering 2', credits: 3, prelim: 1.50, midterm: 1.50, finals: 1.25, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCS122', name: 'Automata and Language Theory', credits: 3, prelim: 1.75, midterm: 1.50, finals: 1.75, finalGrade: 1.75, remarks: 'Very Good', status: 'verified' }
+        ]
+    },
+    // 3rd Year - 2024-2025
+    '2024-1': {
+        year: 3,
+        semester: '1st Semester, AY 2024-2025',
+        gwa: 1.44,
+        credits: 28,
+        courses: [
+            { code: 'OLCS123', name: 'Web Development', credits: 3, prelim: 1.25, midterm: 1.50, finals: 1.25, finalGrade: 1.25, remarks: 'Excellent', status: 'verified' },
+            { code: 'OLCS124', name: 'Integrative Programming and Technologies 1', credits: 4, prelim: 1.50, midterm: 1.25, finals: 1.50, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCS125', name: 'Advanced Database Systems', credits: 4, prelim: 1.50, midterm: 1.50, finals: 1.50, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCS126', name: 'Capstone Project and Research 1', credits: 3, prelim: 1.25, midterm: 1.50, finals: 1.25, finalGrade: 1.25, remarks: 'Excellent', status: 'verified' },
+            { code: 'OLCS127', name: 'Multimedia Systems', credits: 3, prelim: 1.50, midterm: 1.25, finals: 1.50, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCS128', name: 'Mobile Programming', credits: 3, prelim: 1.50, midterm: 1.50, finals: 1.25, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCS129', name: 'Machine Learning Fundamentals', credits: 4, prelim: 1.50, midterm: 1.50, finals: 1.50, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCS130', name: 'Cloud Computing Basics', credits: 4, prelim: 1.25, midterm: 1.50, finals: 1.25, finalGrade: 1.25, remarks: 'Excellent', status: 'verified' }
+        ]
+    },
+    '2024-2': {
+        year: 3,
+        semester: '2nd Semester, AY 2024-2025',
+        gwa: 1.47,
+        credits: 29,
+        courses: [
+            { code: 'OLIPT2', name: 'Integrative Programming and Technologies 2', credits: 4, prelim: 1.25, midterm: 1.50, finals: 1.00, finalGrade: 1.25, remarks: 'Excellent', status: 'verified' },
+            { code: 'OLSA01', name: 'System Administration and Maintenance', credits: 4, prelim: 1.50, midterm: 1.25, finals: 1.50, finalGrade: 1.50, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLITPRAC1', name: 'Practicum (243 Hours)', credits: 3, prelim: 1.75, midterm: 1.50, finals: 1.75, finalGrade: 1.75, remarks: 'Very Good', status: 'pending' },
+            { code: 'OLITPRAC2', name: 'Practicum (243 Hours)', credits: 3, prelim: 1.50, midterm: 1.75, finals: 1.50, finalGrade: 1.75, remarks: 'Very Good', status: 'verified' },
+            { code: 'OLCAPS2', name: 'Capstone Project and Research 2', credits: 3, prelim: 1.75, midterm: 1.75, finals: 1.75, finalGrade: 1.75, remarks: 'Very Good', status: 'pending' },
+            { code: 'OLCC06', name: 'Applications Development and Emerging Technologies', credits: 4, prelim: 1.25, midterm: 1.25, finals: 1.25, finalGrade: 1.25, remarks: 'Excellent', status: 'verified' },
+            { code: 'OLIAS2', name: 'Information Assurance and Security 2', credits: 4, prelim: 1.25, midterm: 1.25, finals: 1.25, finalGrade: 1.25, remarks: 'Excellent', status: 'verified' },
+            { code: 'OLPFI1', name: 'Event Driven Programming', credits: 4, prelim: 1.75, midterm: 1.75, finals: 1.75, finalGrade: 1.75, remarks: 'Very Good', status: 'verified' }
+        ]
+    }
+};
+
+// Function to get grade badge class
+function getGradeBadgeClass(grade) {
+    if (grade <= 1.49) return 'grade-excellent';
+    if (grade <= 1.99) return 'grade-verygood';
+    if (grade <= 2.49) return 'grade-good';
+    if (grade <= 2.99) return 'grade-fair';
+    if (grade === 3.00) return 'grade-passing';
+    return 'grade-fail';
+}
+
+// Function to get status badge
+function getStatusBadge(status) {
+    if (status === 'verified') {
+        return '<span class="badge badge-success"><i class="fas fa-check-circle"></i> Verified</span>';
+    } else if (status === 'pending') {
+        return '<span class="badge badge-warning"><i class="fas fa-clock"></i> Under Verification</span>';
+    } else {
+        return '<span class="badge badge-info"><i class="fas fa-info-circle"></i> Pending</span>';
+    }
+}
+
+// Function to update grades by year level
+function updateGradesByYear() {
+    const yearSelect = document.getElementById('yearLevelSelect');
+    const semesterSelect = document.getElementById('semesterSelect');
+    
+    if (!yearSelect || !semesterSelect) return;
+    
+    const selectedYear = yearSelect.value;
+    
+    if (selectedYear === 'all') {
+        // Show all grades summary
+        renderAllYearsGrades();
+    } else {
+        // Filter semesters for selected year
+        updateSemesterOptions(parseInt(selectedYear));
+        // Load first semester of that year
+        const firstSemester = Object.keys(allGradesData).find(key => 
+            allGradesData[key].year === parseInt(selectedYear)
+        );
+        if (firstSemester) {
+            semesterSelect.value = firstSemester;
+            updateGradesBySemester();
+        }
+    }
+}
+
+// Function to update semester dropdown based on year
+function updateSemesterOptions(year) {
+    const semesterSelect = document.getElementById('semesterSelect');
+    if (!semesterSelect) return;
+    
+    semesterSelect.innerHTML = '';
+    
+    Object.keys(allGradesData).forEach(key => {
+        if (allGradesData[key].year === year) {
+            const option = document.createElement('option');
+            option.value = key;
+            option.textContent = allGradesData[key].semester;
+            if (key === '2024-2') option.textContent += ' (Current)';
+            semesterSelect.appendChild(option);
+        }
+    });
+}
+
+// Function to update grades by semester
+function updateGradesBySemester() {
+    const semesterSelect = document.getElementById('semesterSelect');
+    const yearSelect = document.getElementById('yearLevelSelect');
+    
+    if (!semesterSelect) return;
+    
+    const selectedSemester = semesterSelect.value;
+    const semesterData = allGradesData[selectedSemester];
+    
+    if (!semesterData) return;
+    
+    // Update year selector to match
+    if (yearSelect) {
+        yearSelect.value = semesterData.year.toString();
+    }
+    
+    // Update stats
+    document.getElementById('semesterGWA').textContent = semesterData.gwa.toFixed(2);
+    document.getElementById('creditsValue').textContent = semesterData.credits;
+    document.getElementById('gradeTableTitle').textContent = `Course Grades - ${semesterData.semester}`;
+    
+    // Update table
+    const tbody = document.getElementById('gradesTableBody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = semesterData.courses.map(course => `
+        <tr>
+            <td><span class="badge badge-outline">${course.code}</span></td>
+            <td>${course.name}</td>
+            <td style="text-align: center;">${course.credits}</td>
+            <td style="text-align: center;" title="Prelim Grade">${course.prelim.toFixed(2)}</td>
+            <td style="text-align: center;" title="Midterm Grade">${course.midterm.toFixed(2)}</td>
+            <td style="text-align: center;" title="Finals Grade">${course.finals.toFixed(2)}</td>
+            <td style="text-align: center;"><span class="grade-badge ${getGradeBadgeClass(course.finalGrade)}">${course.finalGrade.toFixed(2)}</span></td>
+            <td class="text-muted">${course.remarks}</td>
+            <td>${getStatusBadge(course.status)}</td>
+        </tr>
+    `).join('') + `
+        <tr class="total-row">
+            <td colspan="2"><strong>SEMESTER TOTALS</strong></td>
+            <td style="text-align: center;"><strong>${semesterData.credits}</strong></td>
+            <td colspan="3" style="text-align: center;" class="text-muted"><em>Grade per period</em></td>
+            <td style="text-align: center;"><strong class="grade-badge ${getGradeBadgeClass(semesterData.gwa)}">${semesterData.gwa.toFixed(2)}</strong></td>
+            <td colspan="2"><strong>Semester GWA</strong></td>
+        </tr>
+    `;
+}
+
+// Function to render all years summary
+function renderAllYearsGrades() {
+    document.getElementById('gradeTableTitle').textContent = 'All Academic Grades - Complete Record';
+    document.getElementById('gwaLabel').textContent = 'Cumulative GWA';
+    document.getElementById('creditsLabel').textContent = 'Total Credits Earned';
+    
+    // Calculate cumulative stats
+    let totalCredits = 0;
+    let totalWeightedGrade = 0;
+    
+    Object.values(allGradesData).forEach(sem => {
+        totalCredits += sem.credits;
+        totalWeightedGrade += sem.gwa * sem.credits;
+    });
+    
+    const cumulativeGWA = totalWeightedGrade / totalCredits;
+    
+    document.getElementById('semesterGWA').textContent = cumulativeGWA.toFixed(2);
+    document.getElementById('creditsValue').textContent = totalCredits;
+    
+    const tbody = document.getElementById('gradesTableBody');
+    if (!tbody) return;
+    
+    let allCoursesHTML = '';
+    
+    // Group by year
+    [1, 2, 3].forEach(year => {
+        const yearSemesters = Object.keys(allGradesData).filter(key => 
+            allGradesData[key].year === year
+        );
+        
+        if (yearSemesters.length > 0) {
+            allCoursesHTML += `
+                <tr class="year-header" style="background: var(--card-bg); font-weight: bold;">
+                    <td colspan="9" style="padding: 1rem; border-top: 2px solid var(--border-color);">
+                        <i class="fas fa-graduation-cap"></i> ${year === 1 ? '1st' : year === 2 ? '2nd' : year === 3 ? '3rd' : '4th'} Year
+                    </td>
+                </tr>
+            `;
+            
+            yearSemesters.forEach(semKey => {
+                const semData = allGradesData[semKey];
+                allCoursesHTML += `
+                    <tr style="background: var(--hover-bg);">
+                        <td colspan="9" style="padding: 0.75rem; font-weight: 600;">
+                            ${semData.semester} - GWA: ${semData.gwa.toFixed(2)} | Credits: ${semData.credits}
+                        </td>
+                    </tr>
+                `;
+                
+                semData.courses.forEach(course => {
+                    allCoursesHTML += `
+                        <tr>
+                            <td><span class="badge badge-outline">${course.code}</span></td>
+                            <td>${course.name}</td>
+                            <td style="text-align: center;">${course.credits}</td>
+                            <td style="text-align: center;">${course.prelim.toFixed(2)}</td>
+                            <td style="text-align: center;">${course.midterm.toFixed(2)}</td>
+                            <td style="text-align: center;">${course.finals.toFixed(2)}</td>
+                            <td style="text-align: center;"><span class="grade-badge ${getGradeBadgeClass(course.finalGrade)}">${course.finalGrade.toFixed(2)}</span></td>
+                            <td class="text-muted">${course.remarks}</td>
+                            <td>${getStatusBadge(course.status)}</td>
+                        </tr>
+                    `;
+                });
+            });
+        }
+    });
+    
+    tbody.innerHTML = allCoursesHTML;
 }
 
 // Anonymous Feedback Form Handler
@@ -1720,4 +2195,33 @@ function showToast(message, type = 'info') {
         toast.classList.remove('show');
         setTimeout(() => toast.remove(), 300);
     }, duration);
+}
+
+// ----------- GRADE VERIFICATION REQUEST -----------
+function requestGradeVerification(courseCode, courseName) {
+    const confirmation = confirm(
+        `Submit grade verification request for ${courseName}?\n\n` +
+        `Course Code: ${courseCode}\n` +
+        `This request must be submitted within 10 days of grade posting.\n\n` +
+        `You will receive a response within 3-5 business days.`
+    );
+    
+    if (confirmation) {
+        // Simulate request submission
+        showToast('Success', `Grade verification request submitted for ${courseName}. You will receive a response within 3-5 business days.`);
+        
+        // Update button state
+        const buttons = document.querySelectorAll(`button[onclick*="${courseCode}"]`);
+        buttons.forEach(btn => {
+            btn.innerHTML = '<i class="fas fa-check"></i> Request Submitted';
+            btn.disabled = true;
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-success');
+            btn.style.cursor = 'not-allowed';
+            btn.style.opacity = '0.7';
+        });
+        
+        // Log to console for debugging
+        console.log(`Grade verification request submitted for ${courseCode} - ${courseName}`);
+    }
 }
