@@ -1884,6 +1884,54 @@
         </div>
     </div>
 
+    <!-- Notifications Popup Modal -->
+    <div id="notificationsModal" class="modal" style="display:none;">
+        <div class="modal-content notifications-modal">
+            <div class="modal-header">
+                <h3>Notifications</h3>
+                <button class="close-btn" onclick="closeNotifications()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="notifications-popup-header">
+                    <span class="badge badge-primary">2 new</span>
+                    <button class="btn-text" onclick="markAllAsRead()">Mark all as read</button>
+                </div>
+                <div class="notifications-list">
+                    <div class="notification-item unread">
+                        <div class="notification-header">
+                            <strong>New Assignment Posted</strong>
+                            <div class="unread-dot"></div>
+                        </div>
+                        <p>Web Development - Project 2 due next week</p>
+                        <span class="notification-time">2 hours ago</span>
+                    </div>
+                    <div class="notification-item unread">
+                        <div class="notification-header">
+                            <strong>Grade Updated</strong>
+                            <div class="unread-dot"></div>
+                        </div>
+                        <p>Your grade for Database Systems midterm is now available</p>
+                        <span class="notification-time">5 hours ago</span>
+                    </div>
+                    <div class="notification-item">
+                        <div class="notification-header">
+                            <strong>Class Cancelled</strong>
+                        </div>
+                        <p>Network Security class on Friday has been cancelled</p>
+                        <span class="notification-time">1 day ago</span>
+                    </div>
+                    <div class="notification-item">
+                        <div class="notification-header">
+                            <strong>Payment Reminder</strong>
+                        </div>
+                        <p>Tuition payment due in 5 days</p>
+                        <span class="notification-time">2 days ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>

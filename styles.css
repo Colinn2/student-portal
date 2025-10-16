@@ -2405,6 +2405,91 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
     border: 1px solid var(--border);
 }
 
+/* Notifications Modal Popup */
+.notifications-modal {
+    max-width: 480px;
+    width: 90%;
+    max-height: 600px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.75rem;
+    color: var(--muted-foreground);
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+    background: var(--accent);
+    color: var(--foreground);
+}
+
+.modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 1.5rem;
+}
+
+.notifications-popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.btn-text {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 0.875rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.btn-text:hover {
+    background: var(--accent);
+}
+
+.notifications-modal .notifications-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.notifications-modal .notification-item {
+    margin-bottom: 0;
+}
+
 /* Minimalist Progress Bars */
 .progress-bar {
     height: 6px;

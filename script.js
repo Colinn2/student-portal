@@ -67,23 +67,47 @@ function navigateTo(pageId) {
   document.querySelector(`.nav-item[data-page="${pageId}"]`).click();
 }
 
-// Show notifications directly from top nav
+// Show notifications popup modal
 function showNotifications() {
-  const pages = document.querySelectorAll(".page");
-  const navItems = document.querySelectorAll(".nav-item");
-  
-  // Hide all pages
-  pages.forEach((p) => p.classList.remove("active"));
-  
-  // Show notifications page
-  const notificationsPage = document.getElementById("notifications-page");
-  if (notificationsPage) {
-    notificationsPage.classList.add("active");
+  const modal = document.getElementById("notificationsModal");
+  if (modal) {
+    modal.style.display = "flex";
   }
-  
-  // Remove active state from all nav items
-  navItems.forEach((item) => item.classList.remove("active"));
 }
+
+// Close notifications popup
+function closeNotifications() {
+  const modal = document.getElementById("notificationsModal");
+  if (modal) {
+    modal.style.display = "none";
+  }
+}
+
+// Mark all notifications as read
+function markAllAsRead() {
+  const unreadItems = document.querySelectorAll("#notificationsModal .notification-item.unread");
+  unreadItems.forEach(item => {
+    item.classList.remove("unread");
+    const dot = item.querySelector(".unread-dot");
+    if (dot) dot.remove();
+  });
+  
+  const badge = document.querySelector("#notificationsModal .badge");
+  if (badge) badge.textContent = "0 new";
+  
+  const topBadge = document.querySelector(".notification-badge");
+  if (topBadge) topBadge.style.display = "none";
+  
+  showToast("Notifications", "All notifications marked as read");
+}
+
+// Close modal when clicking outside
+window.addEventListener("click", function(event) {
+  const modal = document.getElementById("notificationsModal");
+  if (event.target === modal) {
+    closeNotifications();
+  }
+});
 
 // ----------- LEDGER TAB SWITCHING -----------
 const tabButtons = document.querySelectorAll(".tab-btn");
