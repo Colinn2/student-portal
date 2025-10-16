@@ -446,9 +446,87 @@ function updateEnrollmentCart() {
   }
 }
 
+// Submit Enrollment and Update ORF
+function submitEnrollment() {
+  const enrolledCourses = availableCourses.filter(c => c.enrolled);
+  
+  if (enrolledCourses.length === 0) {
+    showToast('No Courses Selected', 'Please select at least one course before submitting.');
+    return;
+  }
+  
+  // Save enrolled courses to localStorage
+  localStorage.setItem('enrolledCourses', JSON.stringify(enrolledCourses));
+  
+  // Update ORF display
+  updateORFSubjects(enrolledCourses);
+  
+  // Show success message
+  showToast('Enrollment Submitted', `Successfully enrolled in ${enrolledCourses.length} course(s). Your ORF has been updated.`);
+  
+  // Optional: Clear enrollment cart after submission
+  // availableCourses.forEach(c => c.enrolled = false);
+  // renderEnrollmentCourses();
+}
+
+// Update ORF with enrolled subjects
+function updateORFSubjects(courses) {
+  const orfSubjectsList = document.getElementById('orfSubjectsList');
+  const orfSummary = document.getElementById('orfSummary');
+  const orfTotalSubjects = document.getElementById('orfTotalSubjects');
+  const orfTotalCredits = document.getElementById('orfTotalCredits');
+  
+  if (!orfSubjectsList) return;
+  
+  if (courses.length === 0) {
+    orfSubjectsList.innerHTML = '<p class="text-muted">No subjects enrolled yet. Go to Available Courses to add subjects.</p>';
+    if (orfSummary) orfSummary.style.display = 'none';
+    return;
+  }
+  
+  // Render enrolled subjects
+  orfSubjectsList.innerHTML = courses.map(course => `
+    <div class="orf-subject-item">
+      <div class="orf-subject-code">
+        <span class="badge badge-outline">${course.code}</span>
+      </div>
+      <div class="orf-subject-details">
+        <h5>${course.name}</h5>
+        <p class="text-muted">
+          <i class="fas fa-user"></i> ${course.instructor} • 
+          <i class="fas fa-clock"></i> ${course.schedule} • 
+          <i class="fas fa-book"></i> ${course.credits} ${course.credits === 1 ? 'credit' : 'credits'}
+        </p>
+      </div>
+    </div>
+  `).join('');
+  
+  // Update summary
+  const totalCredits = courses.reduce((sum, c) => sum + c.credits, 0);
+  if (orfTotalSubjects) orfTotalSubjects.textContent = courses.length;
+  if (orfTotalCredits) orfTotalCredits.textContent = totalCredits;
+  if (orfSummary) orfSummary.style.display = 'flex';
+}
+
+// Load enrolled courses from localStorage on page load
+function loadEnrolledCourses() {
+  const savedCourses = localStorage.getItem('enrolledCourses');
+  if (savedCourses) {
+    try {
+      const courses = JSON.parse(savedCourses);
+      updateORFSubjects(courses);
+    } catch (e) {
+      console.error('Error loading enrolled courses:', e);
+    }
+  }
+}
+
 if (enrollmentCoursesEl) {
   renderEnrollmentCourses();
 }
+
+// Load enrolled courses when page initializes
+loadEnrolledCourses();
 
 // Search and filter for enrollment
 const courseSearchEl = document.getElementById('courseSearch');
@@ -996,17 +1074,76 @@ if (cartItems && cartContainer) {
 async function generateORFPDF(){
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
-  // simple ORF layout
+  
+  // Get enrolled courses from localStorage
+  const savedCourses = localStorage.getItem('enrolledCourses');
+  const enrolledCourses = savedCourses ? JSON.parse(savedCourses) : [];
+  
+  // Header
   doc.setFontSize(16);
-  doc.text('Official Registration Form (ORF)', 14, 20);
+  doc.setFont(undefined, 'bold');
+  doc.text('Official Registration Form (ORF)', 105, 20, { align: 'center' });
+  
+  // Student Information
   doc.setFontSize(11);
-  doc.text('Student ID: 2024-00001', 14, 36);
-  doc.text('Name: Juan Dela Cruz', 14, 44);
-  doc.text('Program: BS Computer Science', 14, 52);
-  doc.text('Year Level: 3rd Year', 14, 60);
-  doc.text('Address: 123 Mabini St., Sampaloc, Manila', 14, 68);
-  doc.text('Signature: ______________________', 14, 120);
-  doc.save('ORF-2024-00001.pdf');
+  doc.setFont(undefined, 'normal');
+  doc.text('Student Information:', 14, 36);
+  doc.setFontSize(10);
+  doc.text('Student ID: UA202200069', 14, 44);
+  doc.text('Name: Colin Dela Cuesta', 14, 50);
+  doc.text('Program: BS Computer Science', 14, 56);
+  doc.text('Year Level: 3rd Year', 14, 62);
+  doc.text('Semester: 2nd Semester, AY 2024-2025', 14, 68);
+  
+  // Enrolled Subjects Section
+  if (enrolledCourses.length > 0) {
+    doc.setFontSize(11);
+    doc.setFont(undefined, 'bold');
+    doc.text('Enrolled Subjects:', 14, 80);
+    
+    let yPos = 90;
+    const totalCredits = enrolledCourses.reduce((sum, c) => sum + c.credits, 0);
+    
+    doc.setFontSize(9);
+    doc.setFont(undefined, 'normal');
+    enrolledCourses.forEach((course, index) => {
+      if (yPos > 270) { // New page if needed
+        doc.addPage();
+        yPos = 20;
+      }
+      
+      doc.text(`${index + 1}. ${course.code} - ${course.name}`, 20, yPos);
+      yPos += 5;
+      doc.setFont(undefined, 'italic');
+      doc.text(`   Instructor: ${course.instructor}`, 20, yPos);
+      yPos += 5;
+      doc.text(`   Schedule: ${course.schedule}`, 20, yPos);
+      yPos += 5;
+      doc.text(`   Credits: ${course.credits}`, 20, yPos);
+      yPos += 8;
+      doc.setFont(undefined, 'normal');
+    });
+    
+    // Summary
+    yPos += 5;
+    doc.setFontSize(10);
+    doc.setFont(undefined, 'bold');
+    doc.text(`Total Subjects: ${enrolledCourses.length}`, 20, yPos);
+    yPos += 6;
+    doc.text(`Total Credits: ${totalCredits}`, 20, yPos);
+  } else {
+    doc.setFontSize(10);
+    doc.text('No subjects enrolled yet.', 14, 80);
+  }
+  
+  // Signature line
+  const finalY = Math.max(180, doc.internal.pageSize.height - 40);
+  doc.text('Student Signature: ______________________', 14, finalY);
+  doc.text('Date: _______________', 14, finalY + 10);
+  
+  // Save PDF
+  doc.save(`ORF-UA202200069-${new Date().toISOString().split('T')[0]}.pdf`);
+  showToast('PDF Generated', 'Your ORF has been downloaded successfully.');
 }
 
 function renderCartOld() {
