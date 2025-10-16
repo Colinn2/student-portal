@@ -117,6 +117,14 @@ body {
     gap: 1.5rem;
 }
 
+.portal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--foreground);
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
 .sidebar-toggle {
     background: transparent;
     border: 1px solid var(--border);
