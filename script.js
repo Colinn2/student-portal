@@ -5,13 +5,21 @@
 // ----------- SIDEBAR TOGGLE -----------
 const sidebarToggle = document.getElementById("sidebarToggle");
 const sidebar = document.getElementById("sidebar");
+const sidebarOverlay = document.getElementById("sidebarOverlay");
 
 sidebarToggle.addEventListener("click", () => {
   if (window.innerWidth <= 768) {
     sidebar.classList.toggle("active");
+    sidebarOverlay.classList.toggle("active");
   } else {
     sidebar.classList.toggle("hidden");
   }
+});
+
+// Close sidebar when clicking overlay
+sidebarOverlay.addEventListener("click", () => {
+  sidebar.classList.remove("active");
+  sidebarOverlay.classList.remove("active");
 });
 
 // Close sidebar when clicking outside on mobile
@@ -19,6 +27,7 @@ document.addEventListener("click", (e) => {
   if (window.innerWidth <= 768) {
     if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
       sidebar.classList.remove("active");
+      sidebarOverlay.classList.remove("active");
     }
   }
 });
@@ -59,6 +68,12 @@ navItems.forEach((item) => {
     item.classList.add("active");
     pages.forEach((p) => p.classList.remove("active"));
     document.getElementById(`${pageId}-page`).classList.add("active");
+    
+    // Close sidebar on mobile when nav item is clicked
+    if (window.innerWidth <= 768) {
+      sidebar.classList.remove("active");
+      sidebarOverlay.classList.remove("active");
+    }
     // Remove automatic sidebar hiding - let users control it manually
   });
 });

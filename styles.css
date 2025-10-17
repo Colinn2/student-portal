@@ -6154,3 +6154,364 @@ textarea.form-control {
 .dark .icon-btn svg {
     stroke: var(--foreground);
 }
+
+/* ============================================
+   COMPREHENSIVE MOBILE RESPONSIVE STYLES
+   ============================================ */
+
+/* Mobile Sidebar Overlay */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 49;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+@media (min-width: 769px) {
+    .sidebar-overlay {
+        display: none !important;
+    }
+}
+
+/* Tablet and below */
+@media (max-width: 1024px) {
+    .quick-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+    
+    .stat-badge {
+        padding: 0.75rem;
+    }
+    
+    .main-content {
+        padding: 1rem;
+    }
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    /* Top Navigation */
+    .top-nav {
+        padding: 0 0.75rem;
+    }
+    
+    .portal-title {
+        font-size: 1rem;
+    }
+    
+    .nav-right {
+        gap: 0.25rem;
+    }
+    
+    .icon-btn {
+        width: 36px;
+        height: 36px;
+    }
+    
+    /* Main Content */
+    .main-content {
+        padding: 0.75rem;
+        margin-left: 0;
+    }
+    
+    /* Page Header */
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .welcome-section h2 {
+        font-size: 1.5rem;
+    }
+    
+    .quick-stats {
+        grid-template-columns: 1fr;
+        width: 100%;
+    }
+    
+    /* Section Header */
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    
+    /* Cards */
+    .card {
+        padding: 1rem;
+    }
+    
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    /* Dashboard Grid */
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    /* Enrollment Grid */
+    .enrollment-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Course Cards */
+    .course-card {
+        padding: 1rem;
+    }
+    
+    .course-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    /* Calendar */
+    .calendar-grid {
+        overflow-x: auto;
+        min-width: 600px;
+    }
+    
+    .calendar-container {
+        overflow-x: auto;
+    }
+    
+    /* Tabs */
+    .tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .tab-btn {
+        white-space: nowrap;
+        font-size: 0.875rem;
+        padding: 0.625rem 0.875rem;
+    }
+    
+    /* Tables */
+    .table-container {
+        overflow-x: auto;
+    }
+    
+    table {
+        min-width: 600px;
+    }
+    
+    /* Store */
+    .category-selector {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+    
+    .store-item-card {
+        padding: 0.875rem;
+    }
+    
+    /* Cart */
+    .cart-item {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .cart-item-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    /* Forms */
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    /* Modals */
+    .modal-content {
+        width: 95%;
+        max-width: 100%;
+        margin: 1rem;
+        max-height: calc(100vh - 2rem);
+    }
+    
+    .notifications-modal {
+        width: 95%;
+        max-height: calc(100vh - 2rem);
+    }
+    
+    /* Announcements */
+    .announcement-item {
+        padding: 0.875rem;
+    }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+    /* Top Nav */
+    .top-nav {
+        padding: 0 0.5rem;
+        height: 56px;
+    }
+    
+    .portal-title {
+        font-size: 0.875rem;
+    }
+    
+    .icon-btn {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .icon-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+        top: 56px;
+        height: calc(100vh - 56px);
+        width: 85%;
+        max-width: 280px;
+    }
+    
+    /* Main Content */
+    .main-content {
+        padding: 0.5rem;
+        min-height: calc(100vh - 56px);
+    }
+    
+    /* Typography */
+    .welcome-section h2 {
+        font-size: 1.25rem;
+    }
+    
+    .welcome-subtitle {
+        font-size: 0.75rem;
+    }
+    
+    .card h3 {
+        font-size: 1rem;
+    }
+    
+    /* Buttons */
+    .btn {
+        padding: 0.5rem 0.875rem;
+        font-size: 0.875rem;
+    }
+    
+    .btn-sm {
+        padding: 0.375rem 0.625rem;
+        font-size: 0.75rem;
+    }
+    
+    /* Stats */
+    .stat-badge {
+        padding: 0.625rem;
+    }
+    
+    .stat-value {
+        font-size: 1.25rem;
+    }
+    
+    .stat-label {
+        font-size: 0.75rem;
+    }
+    
+    /* Category buttons */
+    .category-selector {
+        grid-template-columns: 1fr;
+    }
+    
+    .category-btn {
+        min-width: 100%;
+    }
+    
+    /* Notification items */
+    .notification-item {
+        padding: 0.75rem;
+    }
+    
+    /* Profile section */
+    .profile-section {
+        padding: 1rem 0.75rem;
+    }
+    
+    .profile-avatar {
+        width: 36px;
+        height: 36px;
+        font-size: 0.75rem;
+    }
+    
+    .profile-details h4 {
+        font-size: 0.8rem;
+    }
+    
+    .profile-details p {
+        font-size: 0.7rem;
+    }
+    
+    /* Navigation items */
+    .nav-item {
+        padding: 0.5rem 0.625rem;
+        font-size: 0.8rem;
+    }
+    
+    .nav-section h3 {
+        font-size: 0.7rem;
+        padding: 0.5rem 0.625rem;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+    .top-nav {
+        padding: 0 0.375rem;
+    }
+    
+    .portal-title {
+        display: none;
+    }
+    
+    .student-info .student-name {
+        display: none;
+    }
+    
+    .main-content {
+        padding: 0.375rem;
+    }
+    
+    .card {
+        padding: 0.75rem;
+    }
+}
+
+/* Landscape mobile fix */
+@media (max-height: 500px) and (orientation: landscape) {
+    .sidebar {
+        height: 100vh;
+        top: 0;
+    }
+    
+    .main-content {
+        min-height: 100vh;
+    }
+}
