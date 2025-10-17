@@ -163,12 +163,25 @@
             <div id="dashboard-page" class="page active">
                 <div class="page-header">
                     <div class="welcome-section">
-                        <h2>Welcome back, Colin! 👋</h2>
+                        <h2>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            Welcome back, Colin!
+                        </h2>
                         <p class="welcome-subtitle">Here's your academic progress at a glance</p>
                     </div>
                     <div class="quick-stats">
                         <div class="stat-badge">
-                            <span class="stat-icon">📚</span>
+                            <span class="stat-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                            </span>
                             <div>
                                 <strong>Current Term</strong>
                                 <p>2nd Semester 2024-2025</p>
@@ -269,7 +282,15 @@
                                 <div class="announcement-item">
                                     <div class="announcement-header">
                                         <div class="announcement-title">
-                                            <span class="announcement-icon">📝</span>
+                                            <span class="announcement-icon">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                                </svg>
+                                            </span>
                                             <h4>Final Exams: Dec 18-22, 2024</h4>
                                         </div>
                                         <span class="badge badge-high">Important</span>
@@ -283,7 +304,12 @@
                                 <div class="announcement-item">
                                     <div class="announcement-header">
                                         <div class="announcement-title">
-                                            <span class="announcement-icon">📚</span>
+                                            <span class="announcement-icon">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                                </svg>
+                                            </span>
                                             <h4>Library Holiday Schedule</h4>
                                         </div>
                                         <span class="badge badge-medium">Info</span>
@@ -328,13 +354,19 @@
 
                 <div class="stats-grid stats-grid-2">
                     <div class="stat-card">
-                        <i class="fas fa-chart-line stat-icon" style="color: #4ade80;"></i>
+                        <svg class="stat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                            <polyline points="17 6 23 6 23 12"></polyline>
+                        </svg>
                         <div class="stat-value" id="semesterGWA">1.47</div>
                         <div class="stat-label" id="gwaLabel">Semester GWA</div>
                         <p class="stat-subtitle">1.00 = Highest, 5.00 = Fail</p>
                     </div>
                     <div class="stat-card">
-                        <i class="fas fa-award stat-icon" style="color: #4361ee;"></i>
+                        <svg class="stat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4361ee" stroke-width="2">
+                            <circle cx="12" cy="8" r="7"></circle>
+                            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                        </svg>
                         <div class="stat-value" id="creditsValue">29</div>
                         <div class="stat-label" id="creditsLabel">Credits This Semester</div>
                         <p class="stat-subtitle">Total units enrolled</p>

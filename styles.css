@@ -1131,6 +1131,27 @@ body {
     margin: 0;
 }
 
+.announcement-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: var(--accent);
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+}
+
+.announcement-icon svg {
+    color: var(--foreground);
+}
+
+.announcement-title {
+    display: flex;
+    align-items: center;
+}
+
 .announcement-item p {
     font-size: 0.875rem;
     color: var(--muted-foreground);
@@ -1900,7 +1921,7 @@ body {
     padding: 0.75rem 1rem;
     cursor: pointer;
     color: var(--muted-foreground);
-    font-size: 0.875rem;
+    font-size: 1rem;
     font-weight: 500;
     display: flex;
     align-items: center;
